@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lugha Hai - Preserving Tanzanian Languages</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header with language switcher and user role -->
+    <header>
+        <div class="container">
+            <h1>Lugha Hai</h1>
+            <p class="subtitle" data-en="Preserving Tanzanian Languages" data-sw="Kuhifadhi Lugha za Kitanzania">Preserving Tanzanian Languages</p>
+            
+            <div class="header-controls">
+                <!-- Language switcher -->
+                <div class="language-switcher">
+                    <button class="lang-btn active" data-lang="en">🇬🇧 English</button>
+                    <button class="lang-btn" data-lang="sw">🇹🇿 Kiswahili</button>
+                </div>
+                
+                <!-- Current user role display (for development) -->
+                <div class="user-info">
+                    <span data-en="Role:" data-sw="Jukumu:">Role:</span>
+                    <span id="currentRole">Admin, Editor</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="main-nav">
+        <div class="container">
+            <button class="nav-tab active" data-tab="view" data-en="View Dictionary" data-sw="Tazama Kamusi">View Dictionary</button>
+            <button class="nav-tab" data-tab="add" data-en="Add/Edit" data-sw="Ongeza/Hariri" data-roles="contributor,editor,admin">Add/Edit</button>
+            <button class="nav-tab" data-tab="review" data-en="Review" data-sw="Kagua" data-roles="moderator,admin">Review</button>
+            <button class="nav-tab" data-tab="export" data-en="Export" data-sw="Pakua">Export</button>
+            <button class="nav-tab" data-tab="admin" data-en="Administration" data-sw="Usimamizi" data-roles="admin">Administration</button>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="container">
+        
+        <!-- VIEW TAB -->
+        <section id="viewTab" class="tab-content active">
+            <div class="search-section">
+                <h2 data-en="Search Dictionary" data-sw="Tafuta Katika Kamusi">Search Dictionary</h2>
+                
+                <!-- Current language pair -->
+                <div class="language-pair">
+                    <span data-en="Currently showing: Kikurya ↔ English" data-sw="Inaonyesha sasa: Kikurya ↔ Kiswahili">Currently showing: Kikurya ↔ English</span>
+                </div>
+                
+                <!-- Search box -->
+                <input type="text" id="searchBox" placeholder="Type to search..." data-placeholder-en="Type to search..." data-placeholder-sw="Andika kutafuta...">
+                
+                <!-- Filters -->
+                <div class="filters">
+                    <select id="categoryFilter">
+                        <option value="" data-en="All Categories" data-sw="Kategoria Zote">All Categories</option>
+                        <option value="family" data-en="Family" data-sw="Familia">Family</option>
+                        <option value="food" data-en="Food" data-sw="Chakula">Food</option>
+                        <option value="nature" data-en="Nature" data-sw="Asili">Nature</option>
+                        <option value="medical" data-en="Medical" data-sw="Matibabu">Medical</option>
+                        <option value="verbs" data-en="Verbs" data-sw="Vitenzi">Verbs</option>
+                        <option value="other" data-en="Other" data-sw="Nyingine">Other</option>
+                    </select>
+                    
+                    <select id="levelFilter">
+                        <option value="" data-en="All Levels" data-sw="Viwango Vyote">All Levels</option>
+                        <option value="A1">A1</option>
+                        <option value="A2">A2</option>
+                        <option value="B1">B1</option>
+                        <option value="B2">B2</option>
+                        <option value="C1">C1</option>
+                        <option value="C2">C2</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Results -->
+            <div id="searchResults" class="results-grid">
+                <!-- Word cards will be inserted here -->
+                <p class="no-results" data-en="No words found. Start adding words!" data-sw="Hakuna maneno. Anza kuongeza maneno!">No words found. Start adding words!</p>
+            </div>
+        </section>
+
+        <!-- ADD/EDIT TAB -->
+        <section id="addTab" class="tab-content">
+            <h2 data-en="Add New Word" data-sw="Ongeza Neno Jipya">Add New Word</h2>
+            
+            <form id="wordForm" class="word-form">
+                <div class="form-group">
+                    <label for="kikuryaWord">Kikurya <span class="required">*</span></label>
+                    <input type="text" id="kikuryaWord" required>
+                    <small data-en="Alternative spellings (comma separated)" data-sw="Tahajia mbadala (tenganisha kwa mkato)">Alternative spellings (comma separated)</small>
+                    <input type="text" id="alternativeSpellings" placeholder="optional">
+                </div>
+                
+                <div class="form-group">
+                    <label for="swahiliWord">Kiswahili <span class="required">*</span></label>
+                    <input type="text" id="swahiliWord" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="englishWord">English <span class="required">*</span></label>
+                    <input type="text" id="englishWord" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="swahiliExplanation" data-en="Explanation (Kiswahili)" data-sw="Maelezo (Kiswahili)">Explanation (Kiswahili)</label>
+                    <textarea id="swahiliExplanation" rows="3" placeholder="Optional - for cultural context"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="englishExplanation" data-en="Explanation (English)" data-sw="Maelezo (English)">Explanation (English)</label>
+                    <textarea id="englishExplanation" rows="3" placeholder="Optional - for cultural context"></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="category" data-en="Category" data-sw="Kategoria">Category <span class="required">*</span></label>
+                        <select id="category" required>
+                            <option value="" data-en="Select category" data-sw="Chagua kategoria">Select category</option>
+                            <option value="family" data-en="Family" data-sw="Familia">Family</option>
+                            <option value="food" data-en="Food" data-sw="Chakula">Food</option>
+                            <option value="nature" data-en="Nature" data-sw="Asili">Nature</option>
+                            <option value="medical" data-en="Medical" data-sw="Matibabu">Medical</option>
+                            <option value="verbs" data-en="Verbs" data-sw="Vitenzi">Verbs</option>
+                            <option value="other" data-en="Other" data-sw="Nyingine">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="level" data-en="Level" data-sw="Kiwango">Level <span class="required">*</span></label>
+                        <select id="level" required>
+                            <option value="">Select level</option>
+                            <option value="A1">A1</option>
+                            <option value="A2">A2</option>
+                            <option value="B1">B1</option>
+                            <option value="B2">B2</option>
+                            <option value="C1">C1</option>
+                            <option value="C2">C2</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="swahiliExample" data-en="Example sentence (Kiswahili)" data-sw="Sentensi ya mfano (Kiswahili)">Example sentence (Kiswahili)</label>
+                    <input type="text" id="swahiliExample" placeholder="Optional">
+                </div>
+                
+                <div class="form-group">
+                    <label for="englishExample" data-en="Example sentence (English)" data-sw="Sentensi ya mfano (English)">Example sentence (English)</label>
+                    <input type="text" id="englishExample" placeholder="Optional">
+                </div>
+                
+                <div class="form-group">
+                    <label for="audioFile" data-en="Audio file" data-sw="Faili ya sauti">Audio file</label>
+                    <input type="file" id="audioFile" accept="audio/*">
+                    <small data-en="Upload pronunciation (optional)" data-sw="Pakia matamshi (si lazima)">Upload pronunciation (optional)</small>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" data-en="Add Word" data-sw="Ongeza Neno">Add Word</button>
+                    <button type="button" class="btn btn-secondary" id="clearForm" data-en="Clear Form" data-sw="Futa Fomu">Clear Form</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- REVIEW TAB (Moderator) -->
+        <section id="reviewTab" class="tab-content">
+            <h2 data-en="Review Pending Words" data-sw="Kagua Maneno Yanayosubiri">Review Pending Words</h2>
+            
+            <div class="review-stats">
+                <div class="stat-card">
+                    <span class="stat-number" id="pendingCount">0</span>
+                    <span class="stat-label" data-en="Words Pending" data-sw="Maneno Yanasubiri">Words Pending</span>
+                </div>
+            </div>
+            
+            <div class="filters">
+                <select id="reviewCategoryFilter">
+                    <option value="" data-en="All Categories" data-sw="Kategoria Zote">All Categories</option>
+                    <option value="family" data-en="Family" data-sw="Familia">Family</option>
+                    <option value="food" data-en="Food" data-sw="Chakula">Food</option>
+                    <option value="nature" data-en="Nature" data-sw="Asili">Nature</option>
+                    <option value="medical" data-en="Medical" data-sw="Matibabu">Medical</option>
+                    <option value="verbs" data-en="Verbs" data-sw="Vitenzi">Verbs</option>
+                    <option value="other" data-en="Other" data-sw="Nyingine">Other</option>
+                </select>
+                
+                <select id="reviewLevelFilter">
+                    <option value="" data-en="All Levels" data-sw="Viwango Vyote">All Levels</option>
+                    <option value="A1">A1</option>
+                    <option value="A2">A2</option>
+                    <option value="B1">B1</option>
+                    <option value="B2">B2</option>
+                    <option value="C1">C1</option>
+                    <option value="C2">C2</option>
+                </select>
+            </div>
+            
+            <div id="reviewResults" class="review-grid">
+                <p class="no-results" data-en="No pending words to review" data-sw="Hakuna maneno ya kukagua">No pending words to review</p>
+            </div>
+        </section>
+
+        <!-- EXPORT TAB -->
+        <section id="exportTab" class="tab-content">
+            <h2 data-en="Export Dictionary" data-sw="Pakua Kamusi">Export Dictionary</h2>
+            
+            <div class="export-section">
+                <h3 data-en="Select what to export" data-sw="Chagua cha kupakua">Select what to export</h3>
+                
+                <div class="filters">
+                    <select id="exportCategoryFilter">
+                        <option value="" data-en="All Categories" data-sw="Kategoria Zote">All Categories</option>
+                        <option value="family" data-en="Family" data-sw="Familia">Family</option>
+                        <option value="food" data-en="Food" data-sw="Chakula">Food</option>
+                        <option value="nature" data-en="Nature" data-sw="Asili">Nature</option>
+                        <option value="medical" data-en="Medical" data-sw="Matibabu">Medical</option>
+                        <option value="verbs" data-en="Verbs" data-sw="Vitenzi">Verbs</option>
+                        <option value="other" data-en="Other" data-sw="Nyingine">Other</option>
+                    </select>
+                    
+                    <select id="exportLevelFilter">
+                        <option value="" data-en="All Levels" data-sw="Viwango Vyote">All Levels</option>
+                        <option value="A1">A1</option>
+                        <option value="A2">A2</option>
+                        <option value="B1">B1</option>
+                        <option value="B2">B2</option>
+                        <option value="C1">C1</option>
+                        <option value="C2">C2</option>
+                    </select>
+                </div>
+                
+                <div class="export-options">
+                    <h3 data-en="Export format" data-sw="Aina ya upakuaji">Export format</h3>
+                    
+                    <button class="btn btn-primary" id="exportSimpleList" data-en="Simple List (Text)" data-sw="Orodha Rahisi (Maandishi)">Simple List (Text)</button>
+                    <button class="btn btn-primary" id="exportJSON" data-en="Complete Data (JSON)" data-sw="Data Kamili (JSON)">Complete Data (JSON)</button>
+                    <button class="btn btn-primary" id="exportCSV" data-en="Spreadsheet (CSV)" data-sw="Jedwali (CSV)">Spreadsheet (CSV)</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ADMIN TAB -->
+        <section id="adminTab" class="tab-content">
+            <h2 data-en="Administration" data-sw="Usimamizi">Administration</h2>
+            
+            <div class="admin-section">
+                <h3 data-en="Statistics" data-sw="Takwimu">Statistics</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-number" id="totalWords">0</span>
+                        <span class="stat-label" data-en="Total Words" data-sw="Jumla ya Maneno">Total Words</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="verifiedWords">0</span>
+                        <span class="stat-label" data-en="Verified" data-sw="Yaliyokaguliwa">Verified</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="pendingWords">0</span>
+                        <span class="stat-label" data-en="Pending" data-sw="Yanasubiri">Pending</span>
+                    </div>
+                </div>
+                
+                <h3 data-en="Data Management" data-sw="Usimamizi wa Data">Data Management</h3>
+                <div class="admin-actions">
+                    <button class="btn btn-secondary" id="backupData" data-en="Backup All Data" data-sw="Hifadhi Data Yote">Backup All Data</button>
+                    <button class="btn btn-secondary" id="importData" data-en="Import Data" data-sw="Ingiza Data">Import Data</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p data-en="Lugha Hai - Preserving the linguistic heritage of Tanzania" data-sw="Lugha Hai - Kuhifadhi urithi wa lugha wa Tanzania">Lugha Hai - Preserving the linguistic heritage of Tanzania</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
