@@ -1,5 +1,5 @@
 // ============================================
-// LUGHA HAI - Main JavaScript
+// LUGHA HAI - Main JavaScript (Updated)
 // ============================================
 
 // Global state
@@ -7,6 +7,8 @@ let currentLang = 'en'; // Interface language (en/sw)
 let currentUserLang = 'en'; // Dictionary translation language (en/sw)
 let userRoles = ['admin', 'editor']; // Current user roles (for development, will be dynamic later)
 let dictionaryData = []; // All dictionary words
+let categories = []; // Custom categories
+let verbSettings = {}; // Pronouns and tenses for verbs
 
 // ============================================
 // INITIALIZATION
@@ -15,6 +17,9 @@ let dictionaryData = []; // All dictionary words
 document.addEventListener('DOMContentLoaded', function() {
     // Load data from localStorage
     loadDictionaryData();
+    loadCategories();
+    loadVerbSettings();
+    loadUserRoles();
     
     // Setup event listeners
     setupLanguageSwitcher();
@@ -24,6 +29,9 @@ document.addEventListener('DOMContentLoaded', function() {
     setupReview();
     setupExport();
     setupAdmin();
+    setupCategoryManagement();
+    setupVerbSettings();
+    setupRoleSelection();
     
     // Initialize UI
     updateInterfaceLanguage();
@@ -31,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
     showTabsByRole();
     renderSearchResults();
     updateStatistics();
+    populateCategorySelects();
 });
 
 // ============================================
@@ -42,7 +51,6 @@ function loadDictionaryData() {
     if (saved) {
         dictionaryData = JSON.parse(saved);
     } else {
-        // Initialize with empty array
         dictionaryData = [];
         saveDictionaryData();
     }
@@ -50,6 +58,68 @@ function loadDictionaryData() {
 
 function saveDictionaryData() {
     localStorage.setItem('lughahai_kikurya', JSON.stringify(dictionaryData));
+}
+
+function loadCategories() {
+    const saved = localStorage.getItem('lughahai_categories');
+    if (saved) {
+        categories = JSON.parse(saved);
+    } else {
+        // Default categories
+        categories = [
+            { id: 'family', name: { en: 'Family', sw: 'Familia' } },
+            { id: 'food', name: { en: 'Food', sw: 'Chakula' } },
+            { id: 'nature', name: { en: 'Nature', sw: 'Asili' } },
+            { id: 'medical', name: { en: 'Medical', sw: 'Matibabu' } },
+            { id: 'verbs', name: { en: 'Verbs', sw: 'Vitenzi' } },
+            { id: 'other', name: { en: 'Other', sw: 'Nyingine' } }
+        ];
+        saveCategories();
+    }
+}
+
+function saveCategories() {
+    localStorage.setItem('lughahai_categories', JSON.stringify(categories));
+}
+
+function loadVerbSettings() {
+    const saved = localStorage.getItem('lughahai_verb_settings');
+    if (saved) {
+        verbSettings = JSON.parse(saved);
+    } else {
+        // Default verb settings for Kikurya
+        verbSettings = {
+            pronouns: [
+                { id: 'p1', kikurya: 'nye', sw: 'mimi', en: 'I' },
+                { id: 'p2', kikurya: 'we', sw: 'wewe', en: 'you (sg)' },
+                { id: 'p3', kikurya: 'ũmwe', sw: 'yeye', en: 'he/she' },
+                { id: 'p4', kikurya: 'itwe', sw: 'sisi', en: 'we' },
+                { id: 'p5', kikurya: 'imwe', sw: 'ninyi', en: 'you (pl)' },
+                { id: 'p6', kikurya: 'bo', sw: 'wao', en: 'they' }
+            ],
+            tenses: [
+                { id: 't1', kikurya: 'present', sw: 'wakati uliopo', en: 'present' },
+                { id: 't2', kikurya: 'past', sw: 'wakati uliopita', en: 'past' },
+                { id: 't3', kikurya: 'future', sw: 'wakati ujao', en: 'future' }
+            ]
+        };
+        saveVerbSettings();
+    }
+}
+
+function saveVerbSettings() {
+    localStorage.setItem('lughahai_verb_settings', JSON.stringify(verbSettings));
+}
+
+function loadUserRoles() {
+    const saved = localStorage.getItem('lughahai_dev_roles');
+    if (saved) {
+        userRoles = JSON.parse(saved);
+    }
+}
+
+function saveUserRoles() {
+    localStorage.setItem('lughahai_dev_roles', JSON.stringify(userRoles));
 }
 
 function addWord(wordData) {
@@ -65,9 +135,10 @@ function addWord(wordData) {
         exampleEn: wordData.exampleEn || '',
         category: wordData.category,
         level: wordData.level,
+        conjugations: wordData.conjugations || null, // For verbs
         audioFile: wordData.audioFile || null,
         status: userRoles.includes('editor') || userRoles.includes('admin') ? 'verified' : 'pending',
-        author: 'current_user', // Will be replaced with actual user ID
+        author: 'current_user',
         dateAdded: new Date().toISOString(),
         lastModified: new Date().toISOString(),
         modifiedBy: 'current_user'
@@ -125,7 +196,6 @@ function switchInterfaceLanguage(lang) {
     currentLang = lang;
     currentUserLang = lang;
     
-    // Update active button
     document.querySelectorAll('.lang-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.lang === lang);
     });
@@ -133,10 +203,10 @@ function switchInterfaceLanguage(lang) {
     updateInterfaceLanguage();
     updateLanguagePairDisplay();
     renderSearchResults();
+    populateCategorySelects();
 }
 
 function updateInterfaceLanguage() {
-    // Update all elements with data-en and data-sw attributes
     document.querySelectorAll('[data-en]').forEach(el => {
         if (currentLang === 'en' && el.dataset.en) {
             el.textContent = el.dataset.en;
@@ -145,7 +215,6 @@ function updateInterfaceLanguage() {
         }
     });
     
-    // Update placeholders
     document.querySelectorAll('[data-placeholder-en]').forEach(el => {
         if (currentLang === 'en' && el.dataset.placeholderEn) {
             el.placeholder = el.dataset.placeholderEn;
@@ -181,12 +250,10 @@ function setupNavigation() {
 }
 
 function switchTab(tabName) {
-    // Update active nav button
     document.querySelectorAll('.nav-tab').forEach(tab => {
         tab.classList.toggle('active', tab.dataset.tab === tabName);
     });
     
-    // Update active content
     document.querySelectorAll('.tab-content').forEach(content => {
         content.classList.remove('active');
     });
@@ -195,11 +262,12 @@ function switchTab(tabName) {
     if (targetTab) {
         targetTab.classList.add('active');
         
-        // Refresh data when switching to certain tabs
         if (tabName === 'review') {
             renderReviewWords();
         } else if (tabName === 'admin') {
             updateStatistics();
+            renderCategoriesList();
+            renderVerbSettingsUI();
         }
     }
 }
@@ -225,6 +293,273 @@ function updateUserRoleDisplay() {
 }
 
 // ============================================
+// CATEGORY MANAGEMENT
+// ============================================
+
+function setupCategoryManagement() {
+    const addCategoryBtn = document.getElementById('addCategoryBtn');
+    if (addCategoryBtn) {
+        addCategoryBtn.addEventListener('click', showAddCategoryForm);
+    }
+}
+
+function renderCategoriesList() {
+    const container = document.getElementById('categoriesList');
+    if (!container) return;
+    
+    const html = categories.map(cat => `
+        <div class="category-item" data-id="${cat.id}">
+            <div class="category-info">
+                <strong>${cat.name[currentLang]}</strong>
+                <span class="category-id">(ID: ${cat.id})</span>
+            </div>
+            <div class="category-actions">
+                <button class="btn btn-edit" onclick="editCategory('${cat.id}')">
+                    ${currentLang === 'en' ? 'Edit' : 'Hariri'}
+                </button>
+                <button class="btn btn-reject" onclick="deleteCategory('${cat.id}')">
+                    ${currentLang === 'en' ? 'Delete' : 'Futa'}
+                </button>
+            </div>
+        </div>
+    `).join('');
+    
+    container.innerHTML = html;
+}
+
+function showAddCategoryForm() {
+    const id = prompt(currentLang === 'en' ? 'Category ID (lowercase, no spaces):' : 'ID ya Kategoria (herufi ndogo, bila nafasi):');
+    if (!id) return;
+    
+    const nameEn = prompt('Category name (English):');
+    if (!nameEn) return;
+    
+    const nameSw = prompt('Category name (Kiswahili):');
+    if (!nameSw) return;
+    
+    categories.push({
+        id: id.toLowerCase().replace(/\s+/g, '_'),
+        name: { en: nameEn, sw: nameSw }
+    });
+    
+    saveCategories();
+    renderCategoriesList();
+    populateCategorySelects();
+    
+    const message = currentLang === 'en' ? 'Category added!' : 'Kategoria imeongezwa!';
+    alert(message);
+}
+
+function editCategory(id) {
+    const category = categories.find(c => c.id === id);
+    if (!category) return;
+    
+    const nameEn = prompt('Category name (English):', category.name.en);
+    if (!nameEn) return;
+    
+    const nameSw = prompt('Category name (Kiswahili):', category.name.sw);
+    if (!nameSw) return;
+    
+    category.name = { en: nameEn, sw: nameSw };
+    saveCategories();
+    renderCategoriesList();
+    populateCategorySelects();
+    
+    const message = currentLang === 'en' ? 'Category updated!' : 'Kategoria imesasishwa!';
+    alert(message);
+}
+
+function deleteCategory(id) {
+    const confirmText = currentLang === 'en' 
+        ? 'Delete this category? Words using it will need to be recategorized.'
+        : 'Futa kategoria hii? Maneno yanayoitumia yatahitaji kubadilishwa kategoria.';
+    
+    if (!confirm(confirmText)) return;
+    
+    categories = categories.filter(c => c.id !== id);
+    saveCategories();
+    renderCategoriesList();
+    populateCategorySelects();
+}
+
+function populateCategorySelects() {
+    const selects = [
+        'categoryFilter',
+        'category',
+        'reviewCategoryFilter',
+        'exportCategoryFilter'
+    ];
+    
+    selects.forEach(selectId => {
+        const select = document.getElementById(selectId);
+        if (!select) return;
+        
+        const currentValue = select.value;
+        const isFilter = selectId.includes('Filter');
+        
+        let html = isFilter ? `<option value="">${currentLang === 'en' ? 'All Categories' : 'Kategoria Zote'}</option>` : 
+                              `<option value="">${currentLang === 'en' ? 'Select category' : 'Chagua kategoria'}</option>`;
+        
+        categories.forEach(cat => {
+            html += `<option value="${cat.id}">${cat.name[currentLang]}</option>`;
+        });
+        
+        select.innerHTML = html;
+        select.value = currentValue;
+    });
+}
+
+// ============================================
+// VERB SETTINGS
+// ============================================
+
+function setupVerbSettings() {
+    const savePronounsBtn = document.getElementById('savePronounsBtn');
+    const saveTensesBtn = document.getElementById('saveTensesBtn');
+    
+    if (savePronounsBtn) savePronounsBtn.addEventListener('click', savePronouns);
+    if (saveTensesBtn) saveTensesBtn.addEventListener('click', saveTenses);
+}
+
+function renderVerbSettingsUI() {
+    renderPronounsList();
+    renderTensesList();
+}
+
+function renderPronounsList() {
+    const container = document.getElementById('pronounsList');
+    if (!container) return;
+    
+    const html = verbSettings.pronouns.map((p, idx) => `
+        <div class="verb-setting-item">
+            <input type="text" value="${p.kikurya}" id="pronoun_kikurya_${idx}" placeholder="Kikurya">
+            <input type="text" value="${p.sw}" id="pronoun_sw_${idx}" placeholder="Kiswahili">
+            <input type="text" value="${p.en}" id="pronoun_en_${idx}" placeholder="English">
+            <button class="btn btn-reject" onclick="deletePronoun(${idx})">✗</button>
+        </div>
+    `).join('');
+    
+    container.innerHTML = html + `
+        <button class="btn btn-secondary" onclick="addPronoun()">
+            + ${currentLang === 'en' ? 'Add Pronoun' : 'Ongeza Kiwakilishi'}
+        </button>
+    `;
+}
+
+function renderTensesList() {
+    const container = document.getElementById('tensesList');
+    if (!container) return;
+    
+    const html = verbSettings.tenses.map((t, idx) => `
+        <div class="verb-setting-item">
+            <input type="text" value="${t.kikurya}" id="tense_kikurya_${idx}" placeholder="Kikurya">
+            <input type="text" value="${t.sw}" id="tense_sw_${idx}" placeholder="Kiswahili">
+            <input type="text" value="${t.en}" id="tense_en_${idx}" placeholder="English">
+            <button class="btn btn-reject" onclick="deleteTense(${idx})">✗</button>
+        </div>
+    `).join('');
+    
+    container.innerHTML = html + `
+        <button class="btn btn-secondary" onclick="addTense()">
+            + ${currentLang === 'en' ? 'Add Tense' : 'Ongeza Wakati'}
+        </button>
+    `;
+}
+
+function addPronoun() {
+    verbSettings.pronouns.push({
+        id: 'p' + Date.now(),
+        kikurya: '',
+        sw: '',
+        en: ''
+    });
+    renderPronounsList();
+}
+
+function deletePronoun(idx) {
+    verbSettings.pronouns.splice(idx, 1);
+    renderPronounsList();
+}
+
+function savePronouns() {
+    verbSettings.pronouns.forEach((p, idx) => {
+        p.kikurya = document.getElementById(`pronoun_kikurya_${idx}`).value;
+        p.sw = document.getElementById(`pronoun_sw_${idx}`).value;
+        p.en = document.getElementById(`pronoun_en_${idx}`).value;
+    });
+    
+    saveVerbSettings();
+    alert(currentLang === 'en' ? 'Pronouns saved!' : 'Viwakilishi vimehifadhiwa!');
+}
+
+function addTense() {
+    verbSettings.tenses.push({
+        id: 't' + Date.now(),
+        kikurya: '',
+        sw: '',
+        en: ''
+    });
+    renderTensesList();
+}
+
+function deleteTense(idx) {
+    verbSettings.tenses.splice(idx, 1);
+    renderTensesList();
+}
+
+function saveTenses() {
+    verbSettings.tenses.forEach((t, idx) => {
+        t.kikurya = document.getElementById(`tense_kikurya_${idx}`).value;
+        t.sw = document.getElementById(`tense_sw_${idx}`).value;
+        t.en = document.getElementById(`tense_en_${idx}`).value;
+    });
+    
+    saveVerbSettings();
+    alert(currentLang === 'en' ? 'Tenses saved!' : 'Nyakati zimehifadhiwa!');
+}
+
+// ============================================
+// ROLE SELECTION (Development)
+// ============================================
+
+function setupRoleSelection() {
+    const checkboxes = document.querySelectorAll('.role-checkbox');
+    checkboxes.forEach(cb => {
+        cb.addEventListener('change', updateUserRolesFromCheckboxes);
+    });
+    
+    // Initialize checkboxes based on current roles
+    updateRoleCheckboxes();
+}
+
+function updateRoleCheckboxes() {
+    userRoles.forEach(role => {
+        const checkbox = document.getElementById(`role_${role}`);
+        if (checkbox) checkbox.checked = true;
+    });
+}
+
+function updateUserRolesFromCheckboxes() {
+    const allRoles = ['viewer', 'contributor', 'editor', 'moderator', 'admin'];
+    userRoles = allRoles.filter(role => {
+        const checkbox = document.getElementById(`role_${role}`);
+        return checkbox && checkbox.checked;
+    });
+    
+    // Viewer is always included
+    if (!userRoles.includes('viewer')) {
+        userRoles.push('viewer');
+    }
+    
+    saveUserRoles();
+    updateUserRoleDisplay();
+    showTabsByRole();
+    
+    const message = currentLang === 'en' ? 'Roles updated!' : 'Majukumu yamebadilishwa!';
+    console.log(message, userRoles);
+}
+
+// ============================================
 // SEARCH & FILTER
 // ============================================
 
@@ -244,19 +579,14 @@ function renderSearchResults() {
     const level = document.getElementById('levelFilter').value;
     
     let filtered = dictionaryData.filter(word => {
-        // Only show verified words in search
         if (word.status !== 'verified') return false;
         
-        // Search term filter
         const matchesSearch = !searchTerm || 
             word.kikurya.toLowerCase().includes(searchTerm) ||
             word.swahili.toLowerCase().includes(searchTerm) ||
             word.english.toLowerCase().includes(searchTerm);
         
-        // Category filter
         const matchesCategory = !category || word.category === category;
-        
-        // Level filter
         const matchesLevel = !level || word.level === level;
         
         return matchesSearch && matchesCategory && matchesLevel;
@@ -280,7 +610,28 @@ function createWordCard(word) {
     const explanation = currentUserLang === 'en' ? word.explanationEn : word.explanationSw;
     const example = currentUserLang === 'en' ? word.exampleEn : word.exampleSw;
     
-    const categoryLabel = getCategoryLabel(word.category);
+    const categoryObj = categories.find(c => c.id === word.category);
+    const categoryLabel = categoryObj ? categoryObj.name[currentLang] : word.category;
+    
+    let conjugationsHTML = '';
+    if (word.category === 'verbs' && word.conjugations) {
+        conjugationsHTML = '<div class="word-conjugations"><strong>' + 
+            (currentLang === 'en' ? 'Conjugations:' : 'Matumizi:') + '</strong>';
+        
+        verbSettings.tenses.forEach(tense => {
+            if (word.conjugations[tense.id]) {
+                conjugationsHTML += `<div class="tense-group"><em>${tense[currentLang]}:</em> `;
+                const forms = [];
+                verbSettings.pronouns.forEach(pronoun => {
+                    if (word.conjugations[tense.id][pronoun.id]) {
+                        forms.push(word.conjugations[tense.id][pronoun.id]);
+                    }
+                });
+                conjugationsHTML += forms.join(', ') + '</div>';
+            }
+        });
+        conjugationsHTML += '</div>';
+    }
     
     return `
         <div class="word-card" data-id="${word.id}">
@@ -293,6 +644,7 @@ function createWordCard(word) {
             </div>
             ${explanation ? `<div class="word-explanation">${explanation}</div>` : ''}
             ${example ? `<div class="word-example">"${example}"</div>` : ''}
+            ${conjugationsHTML}
             ${word.audioFile ? `
                 <div class="word-audio">
                     <button class="audio-btn" onclick="playAudio('${word.id}')">
@@ -311,19 +663,6 @@ function createWordCard(word) {
     `;
 }
 
-function getCategoryLabel(category) {
-    const labels = {
-        family: { en: 'Family', sw: 'Familia' },
-        food: { en: 'Food', sw: 'Chakula' },
-        nature: { en: 'Nature', sw: 'Asili' },
-        medical: { en: 'Medical', sw: 'Matibabu' },
-        verbs: { en: 'Verbs', sw: 'Vitenzi' },
-        other: { en: 'Other', sw: 'Nyingine' }
-    };
-    
-    return labels[category]?.[currentLang] || category;
-}
-
 // ============================================
 // FORMS
 // ============================================
@@ -331,6 +670,7 @@ function getCategoryLabel(category) {
 function setupForms() {
     const wordForm = document.getElementById('wordForm');
     const clearBtn = document.getElementById('clearForm');
+    const categorySelect = document.getElementById('category');
     
     wordForm.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -339,7 +679,58 @@ function setupForms() {
     
     clearBtn.addEventListener('click', function() {
         wordForm.reset();
+        hideConjugationForm();
     });
+    
+    categorySelect.addEventListener('change', function() {
+        if (this.value === 'verbs') {
+            showConjugationForm();
+        } else {
+            hideConjugationForm();
+        }
+    });
+}
+
+function showConjugationForm() {
+    let container = document.getElementById('conjugationForm');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'conjugationForm';
+        container.className = 'conjugation-form';
+        document.getElementById('wordForm').insertBefore(
+            container,
+            document.querySelector('.form-actions')
+        );
+    }
+    
+    let html = '<h3>' + (currentLang === 'en' ? 'Verb Conjugations' : 'Matumizi ya Kitenzi') + '</h3>';
+    
+    verbSettings.tenses.forEach(tense => {
+        html += `<div class="tense-section">
+            <h4>${tense[currentLang]}</h4>
+            <div class="conjugation-grid">`;
+        
+        verbSettings.pronouns.forEach(pronoun => {
+            html += `
+                <div class="conjugation-item">
+                    <label>${pronoun.kikurya} (${pronoun[currentLang]})</label>
+                    <input type="text" id="conj_${tense.id}_${pronoun.id}" placeholder="${pronoun.kikurya}...">
+                </div>
+            `;
+        });
+        
+        html += '</div></div>';
+    });
+    
+    container.innerHTML = html;
+    container.style.display = 'block';
+}
+
+function hideConjugationForm() {
+    const container = document.getElementById('conjugationForm');
+    if (container) {
+        container.style.display = 'none';
+    }
 }
 
 function handleWordSubmit() {
@@ -355,21 +746,34 @@ function handleWordSubmit() {
         exampleEn: document.getElementById('englishExample').value.trim(),
         category: document.getElementById('category').value,
         level: document.getElementById('level').value,
-        audioFile: null // TODO: Handle audio file upload
+        audioFile: null
     };
+    
+    // If verb, collect conjugations
+    if (formData.category === 'verbs') {
+        const conjugations = {};
+        verbSettings.tenses.forEach(tense => {
+            conjugations[tense.id] = {};
+            verbSettings.pronouns.forEach(pronoun => {
+                const input = document.getElementById(`conj_${tense.id}_${pronoun.id}`);
+                if (input && input.value.trim()) {
+                    conjugations[tense.id][pronoun.id] = input.value.trim();
+                }
+            });
+        });
+        formData.conjugations = conjugations;
+    }
     
     const newWord = addWord(formData);
     
-    // Show success message
     const message = currentLang === 'en'
         ? `Word "${formData.kikurya}" added successfully! Status: ${newWord.status}`
         : `Neno "${formData.kikurya}" limeongezwa! Hali: ${newWord.status}`;
     alert(message);
     
-    // Clear form
     document.getElementById('wordForm').reset();
+    hideConjugationForm();
     
-    // Update displays
     renderSearchResults();
     updateStatistics();
 }
@@ -378,10 +782,8 @@ function editWord(id) {
     const word = dictionaryData.find(w => w.id === id);
     if (!word) return;
     
-    // Switch to add/edit tab
     switchTab('add');
     
-    // Populate form
     document.getElementById('kikuryaWord').value = word.kikurya;
     document.getElementById('alternativeSpellings').value = word.alternativeSpellings.join(', ');
     document.getElementById('swahiliWord').value = word.swahili;
@@ -393,7 +795,19 @@ function editWord(id) {
     document.getElementById('category').value = word.category;
     document.getElementById('level').value = word.level;
     
-    // TODO: Store the word ID to update instead of creating new
+    // If verb, show and populate conjugations
+    if (word.category === 'verbs' && word.conjugations) {
+        showConjugationForm();
+        
+        verbSettings.tenses.forEach(tense => {
+            verbSettings.pronouns.forEach(pronoun => {
+                const input = document.getElementById(`conj_${tense.id}_${pronoun.id}`);
+                if (input && word.conjugations[tense.id] && word.conjugations[tense.id][pronoun.id]) {
+                    input.value = word.conjugations[tense.id][pronoun.id];
+                }
+            });
+        });
+    }
 }
 
 // ============================================
@@ -421,7 +835,6 @@ function renderReviewWords() {
         return matchesCategory && matchesLevel;
     });
     
-    // Update count
     const countElement = document.getElementById('pendingCount');
     if (countElement) {
         countElement.textContent = pending.length;
@@ -445,7 +858,29 @@ function createReviewCard(word) {
     const translation = currentUserLang === 'en' ? word.english : word.swahili;
     const explanation = currentUserLang === 'en' ? word.explanationEn : word.explanationSw;
     const example = currentUserLang === 'en' ? word.exampleEn : word.exampleSw;
-    const categoryLabel = getCategoryLabel(word.category);
+    
+    const categoryObj = categories.find(c => c.id === word.category);
+    const categoryLabel = categoryObj ? categoryObj.name[currentLang] : word.category;
+    
+    let conjugationsHTML = '';
+    if (word.category === 'verbs' && word.conjugations) {
+        conjugationsHTML = '<div class="word-conjugations"><strong>' + 
+            (currentLang === 'en' ? 'Conjugations:' : 'Matumizi:') + '</strong>';
+        
+        verbSettings.tenses.forEach(tense => {
+            if (word.conjugations[tense.id]) {
+                conjugationsHTML += `<div class="tense-group"><em>${tense[currentLang]}:</em> `;
+                const forms = [];
+                verbSettings.pronouns.forEach(pronoun => {
+                    if (word.conjugations[tense.id][pronoun.id]) {
+                        forms.push(`${pronoun.kikurya}: ${word.conjugations[tense.id][pronoun.id]}`);
+                    }
+                });
+                conjugationsHTML += forms.join(', ') + '</div>';
+            }
+        });
+        conjugationsHTML += '</div>';
+    }
     
     return `
         <div class="word-card" data-id="${word.id}">
@@ -458,6 +893,7 @@ function createReviewCard(word) {
             </div>
             ${explanation ? `<div class="word-explanation">${explanation}</div>` : ''}
             ${example ? `<div class="word-example">"${example}"</div>` : ''}
+            ${conjugationsHTML}
             <div class="word-actions">
                 <button class="btn btn-approve" onclick="handleApprove('${word.id}')">
                     ✓ ${currentLang === 'en' ? 'Approve' : 'Kubali'}
@@ -532,6 +968,22 @@ function exportSimpleList() {
     data.forEach(word => {
         const translation = currentUserLang === 'en' ? word.english : word.swahili;
         text += `${word.kikurya} - ${translation}\n`;
+        
+        if (word.category === 'verbs' && word.conjugations) {
+            verbSettings.tenses.forEach(tense => {
+                if (word.conjugations[tense.id]) {
+                    text += `  ${tense[currentLang]}: `;
+                    const forms = [];
+                    verbSettings.pronouns.forEach(pronoun => {
+                        if (word.conjugations[tense.id][pronoun.id]) {
+                            forms.push(word.conjugations[tense.id][pronoun.id]);
+                        }
+                    });
+                    text += forms.join(', ') + '\n';
+                }
+            });
+        }
+        text += '\n';
     });
     
     downloadFile('kikurya-dictionary.txt', text);
@@ -597,7 +1049,9 @@ function backupData() {
         version: '1.0',
         language: 'kikurya',
         exportDate: new Date().toISOString(),
-        data: dictionaryData
+        data: dictionaryData,
+        categories: categories,
+        verbSettings: verbSettings
     };
     
     const json = JSON.stringify(backup, null, 2);
@@ -628,9 +1082,18 @@ function importData() {
                     
                     if (confirm(confirmText)) {
                         dictionaryData = [...dictionaryData, ...imported.data];
+                        if (imported.categories) categories = imported.categories;
+                        if (imported.verbSettings) verbSettings = imported.verbSettings;
+                        
                         saveDictionaryData();
+                        saveCategories();
+                        saveVerbSettings();
+                        
                         renderSearchResults();
                         updateStatistics();
+                        populateCategorySelects();
+                        renderCategoriesList();
+                        renderVerbSettingsUI();
                         
                         const message = currentLang === 'en' ? 'Import successful!' : 'Kuingiza kumefanikiwa!';
                         alert(message);
@@ -655,17 +1118,21 @@ function importData() {
 function playAudio(wordId) {
     const word = dictionaryData.find(w => w.id === wordId);
     if (word && word.audioFile) {
-        // TODO: Implement audio playback
         alert('Audio playback will be implemented');
     }
 }
 
 // ============================================
-// UTILITY FUNCTIONS
+// GLOBAL FUNCTIONS
 // ============================================
 
-// Make functions available globally for onclick handlers
 window.playAudio = playAudio;
 window.editWord = editWord;
 window.handleApprove = handleApprove;
 window.handleReject = handleReject;
+window.editCategory = editCategory;
+window.deleteCategory = deleteCategory;
+window.addPronoun = addPronoun;
+window.deletePronoun = deletePronoun;
+window.addTense = addTense;
+window.deleteTense = deleteTense;
