@@ -1,5 +1,5 @@
 // ============================================
-// LUGHA HAI - Main JavaScript (Updated)
+// LUGHA HAI - Main JavaScript (Updated with Transcription)
 // ============================================
 
 // Global state
@@ -126,6 +126,7 @@ function addWord(wordData) {
     const newWord = {
         id: Date.now().toString(),
         kikurya: wordData.kikurya,
+        transcription: wordData.transcription || '',
         alternativeSpellings: wordData.alternativeSpellings || [],
         swahili: wordData.swahili,
         english: wordData.english,
@@ -135,7 +136,7 @@ function addWord(wordData) {
         exampleEn: wordData.exampleEn || '',
         category: wordData.category,
         level: wordData.level,
-        conjugations: wordData.conjugations || null, // For verbs
+        conjugations: wordData.conjugations || null,
         audioFile: wordData.audioFile || null,
         status: userRoles.includes('editor') || userRoles.includes('admin') ? 'verified' : 'pending',
         author: 'current_user',
@@ -528,7 +529,6 @@ function setupRoleSelection() {
         cb.addEventListener('change', updateUserRolesFromCheckboxes);
     });
     
-    // Initialize checkboxes based on current roles
     updateRoleCheckboxes();
 }
 
@@ -546,7 +546,6 @@ function updateUserRolesFromCheckboxes() {
         return checkbox && checkbox.checked;
     });
     
-    // Viewer is always included
     if (!userRoles.includes('viewer')) {
         userRoles.push('viewer');
     }
@@ -637,6 +636,8 @@ function createWordCard(word) {
         <div class="word-card" data-id="${word.id}">
             <div class="word-status status-${word.status}">${word.status}</div>
             <div class="word-kikurya">${word.kikurya}</div>
+            ${word.transcription ? `<div class="word-transcription">[${word.transcription}]</div>` : ''}
+            ${word.alternativeSpellings && word.alternativeSpellings.length > 0 ? `<div class="word-alt-spellings"><small>${currentLang === 'en' ? 'Also:' : 'Pia:'} ${word.alternativeSpellings.join(', ')}</small></div>` : ''}
             <div class="word-translation">${translation}</div>
             <div class="word-meta">
                 <span class="meta-tag">${categoryLabel}</span>
@@ -736,6 +737,7 @@ function hideConjugationForm() {
 function handleWordSubmit() {
     const formData = {
         kikurya: document.getElementById('kikuryaWord').value.trim(),
+        transcription: document.getElementById('transcription').value.trim(),
         alternativeSpellings: document.getElementById('alternativeSpellings').value
             .split(',').map(s => s.trim()).filter(s => s),
         swahili: document.getElementById('swahiliWord').value.trim(),
@@ -749,7 +751,6 @@ function handleWordSubmit() {
         audioFile: null
     };
     
-    // If verb, collect conjugations
     if (formData.category === 'verbs') {
         const conjugations = {};
         verbSettings.tenses.forEach(tense => {
@@ -785,7 +786,8 @@ function editWord(id) {
     switchTab('add');
     
     document.getElementById('kikuryaWord').value = word.kikurya;
-    document.getElementById('alternativeSpellings').value = word.alternativeSpellings.join(', ');
+    document.getElementById('transcription').value = word.transcription || '';
+    document.getElementById('alternativeSpellings').value = (word.alternativeSpellings || []).join(', ');
     document.getElementById('swahiliWord').value = word.swahili;
     document.getElementById('englishWord').value = word.english;
     document.getElementById('swahiliExplanation').value = word.explanationSw;
@@ -795,7 +797,6 @@ function editWord(id) {
     document.getElementById('category').value = word.category;
     document.getElementById('level').value = word.level;
     
-    // If verb, show and populate conjugations
     if (word.category === 'verbs' && word.conjugations) {
         showConjugationForm();
         
@@ -886,6 +887,8 @@ function createReviewCard(word) {
         <div class="word-card" data-id="${word.id}">
             <div class="word-status status-${word.status}">${word.status}</div>
             <div class="word-kikurya">${word.kikurya}</div>
+            ${word.transcription ? `<div class="word-transcription">[${word.transcription}]</div>` : ''}
+            ${word.alternativeSpellings && word.alternativeSpellings.length > 0 ? `<div class="word-alt-spellings"><small>${currentLang === 'en' ? 'Also:' : 'Pia:'} ${word.alternativeSpellings.join(', ')}</small></div>` : ''}
             <div class="word-translation">${translation}</div>
             <div class="word-meta">
                 <span class="meta-tag">${categoryLabel}</span>
@@ -967,7 +970,9 @@ function exportSimpleList() {
     
     data.forEach(word => {
         const translation = currentUserLang === 'en' ? word.english : word.swahili;
-        text += `${word.kikurya} - ${translation}\n`;
+        text += `${word.kikurya}`;
+        if (word.transcription) text += ` [${word.transcription}]`;
+        text += ` - ${translation}\n`;
         
         if (word.category === 'verbs' && word.conjugations) {
             verbSettings.tenses.forEach(tense => {
@@ -998,10 +1003,10 @@ function exportJSON() {
 function exportCSV() {
     const data = getFilteredExportData();
     
-    let csv = 'Kikurya,Swahili,English,Category,Level\n';
+    let csv = 'Kikurya,Transcription,Swahili,English,Category,Level\n';
     
     data.forEach(word => {
-        csv += `"${word.kikurya}","${word.swahili}","${word.english}","${word.category}","${word.level}"\n`;
+        csv += `"${word.kikurya}","${word.transcription || ''}","${word.swahili}","${word.english}","${word.category}","${word.level}"\n`;
     });
     
     downloadFile('kikurya-dictionary.csv', csv);
