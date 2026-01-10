@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add/Edit Words - Lugha Hai</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1>Lugha Hai</h1>
+            <p class="subtitle" data-en="Add/Edit Words" data-sw="Ongeza/Hariri Maneno">Add/Edit Words</p>
+            
+            <div class="header-controls">
+                <!-- Language switcher -->
+                <div class="language-switcher">
+                    <button class="lang-btn active" data-lang="en">🇬🇧 English</button>
+                    <button class="lang-btn" data-lang="sw">🇹🇿 Kiswahili</button>
+                </div>
+                
+                <!-- Current user role display -->
+                <div class="user-info">
+                    <span data-en="Role:" data-sw="Jukumu:">Role:</span>
+                    <span id="currentRole">Admin, Editor</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <a href="index.html" class="nav-link" data-en="Dictionary" data-sw="Kamusi">Dictionary</a>
+            <a href="add-word.html" class="nav-link active" data-en="Add/Edit Words" data-sw="Ongeza/Hariri" data-roles="contributor,editor,admin">Add/Edit Words</a>
+            <a href="review.html" class="nav-link" data-en="Review" data-sw="Kagua" data-roles="moderator,admin">Review</a>
+            <a href="training.html" class="nav-link" data-en="Training" data-sw="Mafunzo">Training</a>
+            <a href="export.html" class="nav-link" data-en="Export" data-sw="Pakua">Export</a>
+            <a href="admin.html" class="nav-link" data-en="Admin" data-sw="Usimamizi" data-roles="admin">Admin</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        
+        <h2 data-en="Add New Word" data-sw="Ongeza Neno Jipya">Add New Word</h2>
+        
+        <form id="wordForm" class="word-form">
+            <div class="form-group">
+                <label for="kikuryaWord">Kikurya <span class="required">*</span></label>
+                <input type="text" id="kikuryaWord" required>
+            </div>
+            
+            <!-- TRANSCRIPTION FIELD -->
+            <div class="form-group">
+                <label for="transcription" data-en="Transcription / Pronunciation" data-sw="Maneno ya Matamshi">Transcription / Pronunciation</label>
+                <input type="text" id="transcription" placeholder="[IPA] or simplified pronunciation (optional)">
+                <small data-en="How the word is pronounced (IPA or simplified)" data-sw="Jinsi neno linavyotamkwa (IPA au rahisi)">How the word is pronounced (IPA or simplified)</small>
+            </div>
+            
+            <div class="form-group">
+                <small data-en="Alternative spellings (comma separated)" data-sw="Tahajia mbadala (tenganisha kwa mkato)">Alternative spellings (comma separated)</small>
+                <input type="text" id="alternativeSpellings" placeholder="optional">
+            </div>
+            
+            <div class="form-group">
+                <label for="swahiliWord">Kiswahili <span class="required">*</span></label>
+                <input type="text" id="swahiliWord" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="englishWord">English <span class="required">*</span></label>
+                <input type="text" id="englishWord" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="swahiliExplanation" data-en="Explanation (Kiswahili)" data-sw="Maelezo (Kiswahili)">Explanation (Kiswahili)</label>
+                <textarea id="swahiliExplanation" rows="3" placeholder="Optional - for cultural context"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="englishExplanation" data-en="Explanation (English)" data-sw="Maelezo (English)">Explanation (English)</label>
+                <textarea id="englishExplanation" rows="3" placeholder="Optional - for cultural context"></textarea>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="category" data-en="Category" data-sw="Kategoria">Category <span class="required">*</span></label>
+                    <select id="category" required>
+                        <option value="" data-en="Select category" data-sw="Chagua kategoria">Select category</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="level" data-en="Level" data-sw="Kiwango">Level <span class="required">*</span></label>
+                    <select id="level" required>
+                        <option value="">Select level</option>
+                        <option value="A1">A1</option>
+                        <option value="A2">A2</option>
+                        <option value="B1">B1</option>
+                        <option value="B2">B2</option>
+                        <option value="C1">C1</option>
+                        <option value="C2">C2</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="swahiliExample" data-en="Example sentence (Kiswahili)" data-sw="Sentensi ya mfano (Kiswahili)">Example sentence (Kiswahili)</label>
+                <input type="text" id="swahiliExample" placeholder="Optional">
+            </div>
+            
+            <div class="form-group">
+                <label for="englishExample" data-en="Example sentence (English)" data-sw="Sentensi ya mfano (English)">Example sentence (English)</label>
+                <input type="text" id="englishExample" placeholder="Optional">
+            </div>
+            
+            <div class="form-group">
+                <label for="audioFile" data-en="Audio file" data-sw="Faili ya sauti">Audio file</label>
+                <input type="file" id="audioFile" accept="audio/*">
+                <small data-en="Upload pronunciation (optional)" data-sw="Pakia matamshi (si lazima)">Upload pronunciation (optional)</small>
+            </div>
+            
+            <!-- Conjugation form will be inserted here dynamically for verbs -->
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary" data-en="Add Word" data-sw="Ongeza Neno">Add Word</button>
+                <button type="button" class="btn btn-secondary" id="clearForm" data-en="Clear Form" data-sw="Futa Fomu">Clear Form</button>
+            </div>
+        </form>
+
+        <!-- Word List (for editing existing words) -->
+        <section class="word-list-section">
+            <h3 data-en="Recent Words" data-sw="Maneno ya Hivi Karibuni">Recent Words</h3>
+            <div class="filters">
+                <select id="filterCategory">
+                    <option value="" data-en="All Categories" data-sw="Kategoria Zote">All Categories</option>
+                </select>
+                
+                <select id="filterLevel">
+                    <option value="" data-en="All Levels" data-sw="Viwango Vyote">All Levels</option>
+                    <option value="A1">A1</option>
+                    <option value="A2">A2</option>
+                    <option value="B1">B1</option>
+                    <option value="B2">B2</option>
+                    <option value="C1">C1</option>
+                    <option value="C2">C2</option>
+                </select>
+                
+                <input type="text" id="searchWords" placeholder="Search..." data-placeholder-en="Search..." data-placeholder-sw="Tafuta...">
+            </div>
+            
+            <div id="wordsList" class="words-list">
+                <!-- Words will be rendered here -->
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p data-en="Lugha Hai - Preserving the linguistic heritage of Tanzania" data-sw="Lugha Hai - Kuhifadhi urithi wa lugha wa Tanzania">Lugha Hai - Preserving the linguistic heritage of Tanzania</p>
+        </div>
+    </footer>
+
+    <script src="scripts/common.js"></script>
+    <script src="scripts/add-word.js"></script>
+</body>
+</html>
