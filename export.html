@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Export - Lugha Hai</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1>Lugha Hai</h1>
+            <p class="subtitle" data-en="Export Dictionary" data-sw="Pakua Kamusi">Export Dictionary</p>
+            
+            <div class="header-controls">
+                <!-- Language switcher -->
+                <div class="language-switcher">
+                    <button class="lang-btn active" data-lang="en">🇬🇧 English</button>
+                    <button class="lang-btn" data-lang="sw">🇹🇿 Kiswahili</button>
+                </div>
+                
+                <!-- Current user role display -->
+                <div class="user-info">
+                    <span data-en="Role:" data-sw="Jukumu:">Role:</span>
+                    <span id="currentRole">Editor</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <a href="index.html" class="nav-link" data-en="Dictionary" data-sw="Kamusi">Dictionary</a>
+            <a href="add-word.html" class="nav-link" data-en="Add/Edit Words" data-sw="Ongeza/Hariri" data-roles="contributor,editor,admin">Add/Edit Words</a>
+            <a href="review.html" class="nav-link" data-en="Review" data-sw="Kagua" data-roles="moderator,admin">Review</a>
+            <a href="training.html" class="nav-link" data-en="Training" data-sw="Mafunzo">Training</a>
+            <a href="export.html" class="nav-link active" data-en="Export" data-sw="Pakua">Export</a>
+            <a href="admin.html" class="nav-link" data-en="Admin" data-sw="Usimamizi" data-roles="admin">Admin</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        
+        <h2 data-en="Export Dictionary" data-sw="Pakua Kamusi">Export Dictionary</h2>
+        
+        <div class="export-section">
+            
+            <!-- Export Filters -->
+            <section class="filter-section">
+                <h3 data-en="Select What to Export" data-sw="Chagua Cha Kupakua">Select What to Export</h3>
+                
+                <div class="filters">
+                    <select id="exportCategoryFilter">
+                        <option value="" data-en="All Categories" data-sw="Kategoria Zote">All Categories</option>
+                    </select>
+                    
+                    <select id="exportLevelFilter">
+                        <option value="" data-en="All Levels" data-sw="Viwango Vyote">All Levels</option>
+                        <option value="A1">A1</option>
+                        <option value="A2">A2</option>
+                        <option value="B1">B1</option>
+                        <option value="B2">B2</option>
+                        <option value="C1">C1</option>
+                        <option value="C2">C2</option>
+                    </select>
+
+                    <select id="exportStatusFilter">
+                        <option value="verified" data-en="Verified Only" data-sw="Yaliyokaguliwa Tu">Verified Only</option>
+                        <option value="all" data-en="All Words" data-sw="Maneno Yote">All Words</option>
+                        <option value="pending" data-en="Pending Only" data-sw="Yanayosubiri Tu">Pending Only</option>
+                    </select>
+                </div>
+
+                <!-- Preview Stats -->
+                <div class="export-preview">
+                    <p>
+                        <span data-en="Words to export:" data-sw="Maneno ya kupakua:">Words to export:</span>
+                        <strong id="exportCount">0</strong>
+                    </p>
+                </div>
+            </section>
+
+            <!-- Export Formats -->
+            <section class="format-section">
+                <h3 data-en="Export Format" data-sw="Aina ya Upakuaji">Export Format</h3>
+                
+                <div class="export-formats">
+                    
+                    <!-- Simple List -->
+                    <div class="format-card">
+                        <div class="format-icon">📄</div>
+                        <h4 data-en="Simple List (Text)" data-sw="Orodha Rahisi (Maandishi)">Simple List (Text)</h4>
+                        <p data-en="Basic word list with translations. Good for printing or studying." data-sw="Orodha ya maneno na tafsiri. Nzuri kwa kuchapisha au kusoma.">Basic word list with translations. Good for printing or studying.</p>
+                        <button class="btn btn-primary" id="exportSimpleList" data-en="Export as Text" data-sw="Pakua kama Maandishi">Export as Text</button>
+                    </div>
+
+                    <!-- JSON -->
+                    <div class="format-card">
+                        <div class="format-icon">💾</div>
+                        <h4 data-en="Complete Data (JSON)" data-sw="Data Kamili (JSON)">Complete Data (JSON)</h4>
+                        <p data-en="Full data including all fields, conjugations, audio references. For training apps." data-sw="Data kamili ikijumuisha matumizi, sauti. Kwa programu za mafunzo.">Full data including all fields, conjugations, audio references. For training apps.</p>
+                        <button class="btn btn-primary" id="exportJSON" data-en="Export as JSON" data-sw="Pakua kama JSON">Export as JSON</button>
+                    </div>
+
+                    <!-- CSV -->
+                    <div class="format-card">
+                        <div class="format-icon">📊</div>
+                        <h4 data-en="Spreadsheet (CSV)" data-sw="Jedwali (CSV)">Spreadsheet (CSV)</h4>
+                        <p data-en="Table format for Excel or Google Sheets. Easy to edit and analyze." data-sw="Muundo wa jedwali kwa Excel. Rahisi kuhariri na kuchambua.">Table format for Excel or Google Sheets. Easy to edit and analyze.</p>
+                        <button class="btn btn-primary" id="exportCSV" data-en="Export as CSV" data-sw="Pakua kama CSV">Export as CSV</button>
+                    </div>
+
+                    <!-- Anki Flashcards -->
+                    <div class="format-card">
+                        <div class="format-icon">🎴</div>
+                        <h4 data-en="Anki Flashcards" data-sw="Kadi za Anki">Anki Flashcards</h4>
+                        <p data-en="Format for importing into Anki spaced repetition software." data-sw="Muundo wa kuingiza katika programu ya Anki.">Format for importing into Anki spaced repetition software.</p>
+                        <button class="btn btn-primary" id="exportAnki" data-en="Export for Anki" data-sw="Pakua kwa Anki">Export for Anki</button>
+                    </div>
+
+                    <!-- PDF -->
+                    <div class="format-card">
+                        <div class="format-icon">📕</div>
+                        <h4 data-en="PDF Document" data-sw="Hati ya PDF">PDF Document</h4>
+                        <p data-en="Formatted document ready for printing or sharing." data-sw="Hati iliyoandaliwa tayari kwa kuchapisha au kushiriki.">Formatted document ready for printing or sharing.</p>
+                        <button class="btn btn-primary" id="exportPDF" data-en="Export as PDF" data-sw="Pakua kama PDF">Export as PDF</button>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Export History -->
+            <section class="history-section">
+                <h3 data-en="Recent Exports" data-sw="Upakuaji wa Hivi Karibuni">Recent Exports</h3>
+                <div id="exportHistory" class="export-history">
+                    <p class="no-results" data-en="No exports yet" data-sw="Hakuna upakuaji bado">No exports yet</p>
+                </div>
+            </section>
+
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p data-en="Lugha Hai - Preserving the linguistic heritage of Tanzania" data-sw="Lugha Hai - Kuhifadhi urithi wa lugha wa Tanzania">Lugha Hai - Preserving the linguistic heritage of Tanzania</p>
+        </div>
+    </footer>
+
+    <script src="scripts/common.js"></script>
+    <script src="scripts/export.js"></script>
+</body>
+</html>
