@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review - Lugha Hai</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1>Lugha Hai</h1>
+            <p class="subtitle" data-en="Review Pending Words" data-sw="Kagua Maneno Yanayosubiri">Review Pending Words</p>
+            
+            <div class="header-controls">
+                <!-- Language switcher -->
+                <div class="language-switcher">
+                    <button class="lang-btn active" data-lang="en">🇬🇧 English</button>
+                    <button class="lang-btn" data-lang="sw">🇹🇿 Kiswahili</button>
+                </div>
+                
+                <!-- Current user role display -->
+                <div class="user-info">
+                    <span data-en="Role:" data-sw="Jukumu:">Role:</span>
+                    <span id="currentRole">Moderator</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <a href="index.html" class="nav-link" data-en="Dictionary" data-sw="Kamusi">Dictionary</a>
+            <a href="add-word.html" class="nav-link" data-en="Add/Edit Words" data-sw="Ongeza/Hariri" data-roles="contributor,editor,admin">Add/Edit Words</a>
+            <a href="review.html" class="nav-link active" data-en="Review" data-sw="Kagua" data-roles="moderator,admin">Review</a>
+            <a href="training.html" class="nav-link" data-en="Training" data-sw="Mafunzo">Training</a>
+            <a href="export.html" class="nav-link" data-en="Export" data-sw="Pakua">Export</a>
+            <a href="admin.html" class="nav-link" data-en="Admin" data-sw="Usimamizi" data-roles="admin">Admin</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        
+        <h2 data-en="Review Pending Words" data-sw="Kagua Maneno Yanayosubiri">Review Pending Words</h2>
+        
+        <!-- Review Stats -->
+        <div class="review-stats">
+            <div class="stat-card">
+                <span class="stat-number" id="pendingCount">0</span>
+                <span class="stat-label" data-en="Words Pending Review" data-sw="Maneno Yanasubiri Ukaguzi">Words Pending Review</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="approvedToday">0</span>
+                <span class="stat-label" data-en="Approved Today" data-sw="Yaliyokubaliwa Leo">Approved Today</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="rejectedToday">0</span>
+                <span class="stat-label" data-en="Rejected Today" data-sw="Yaliyokataliwa Leo">Rejected Today</span>
+            </div>
+        </div>
+        
+        <!-- Filters -->
+        <div class="filters">
+            <select id="reviewCategoryFilter">
+                <option value="" data-en="All Categories" data-sw="Kategoria Zote">All Categories</option>
+            </select>
+            
+            <select id="reviewLevelFilter">
+                <option value="" data-en="All Levels" data-sw="Viwango Vyote">All Levels</option>
+                <option value="A1">A1</option>
+                <option value="A2">A2</option>
+                <option value="B1">B1</option>
+                <option value="B2">B2</option>
+                <option value="C1">C1</option>
+                <option value="C2">C2</option>
+            </select>
+
+            <select id="sortOrder">
+                <option value="newest" data-en="Newest First" data-sw="Mpya Kwanza">Newest First</option>
+                <option value="oldest" data-en="Oldest First" data-sw="Za Zamani Kwanza">Oldest First</option>
+            </select>
+        </div>
+        
+        <!-- Review Results -->
+        <div id="reviewResults" class="review-grid">
+            <p class="no-results" data-en="No pending words to review" data-sw="Hakuna maneno ya kukagua">No pending words to review</p>
+        </div>
+
+        <!-- Bulk Actions (when words are selected) -->
+        <div id="bulkActions" class="bulk-actions" style="display: none;">
+            <div class="bulk-info">
+                <span id="selectedCount">0</span>
+                <span data-en="words selected" data-sw="maneno yamechaguliwa">words selected</span>
+            </div>
+            <div class="bulk-buttons">
+                <button class="btn btn-approve" id="bulkApprove" data-en="Approve Selected" data-sw="Kubali Zilizochaguliwa">Approve Selected</button>
+                <button class="btn btn-reject" id="bulkReject" data-en="Reject Selected" data-sw="Kataa Zilizochaguliwa">Reject Selected</button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p data-en="Lugha Hai - Preserving the linguistic heritage of Tanzania" data-sw="Lugha Hai - Kuhifadhi urithi wa lugha wa Tanzania">Lugha Hai - Preserving the linguistic heritage of Tanzania</p>
+        </div>
+    </footer>
+
+    <script src="scripts/common.js"></script>
+    <script src="scripts/review.js"></script>
+</body>
+</html>
