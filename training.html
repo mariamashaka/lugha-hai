@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Training - Lugha Hai</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/training.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1>Lugha Hai</h1>
+            <p class="subtitle" data-en="Language Training Modules" data-sw="Moduli za Mafunzo ya Lugha">Language Training Modules</p>
+            
+            <div class="header-controls">
+                <!-- Language switcher -->
+                <div class="language-switcher">
+                    <button class="lang-btn active" data-lang="en">🇬🇧 English</button>
+                    <button class="lang-btn" data-lang="sw">🇹🇿 Kiswahili</button>
+                </div>
+                
+                <!-- Current user role display -->
+                <div class="user-info">
+                    <span data-en="Role:" data-sw="Jukumu:">Role:</span>
+                    <span id="currentRole">Learner</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <a href="index.html" class="nav-link" data-en="Dictionary" data-sw="Kamusi">Dictionary</a>
+            <a href="add-word.html" class="nav-link" data-en="Add/Edit Words" data-sw="Ongeza/Hariri" data-roles="contributor,editor,admin">Add/Edit Words</a>
+            <a href="review.html" class="nav-link" data-en="Review" data-sw="Kagua" data-roles="moderator,admin">Review</a>
+            <a href="training.html" class="nav-link active" data-en="Training" data-sw="Mafunzo">Training</a>
+            <a href="export.html" class="nav-link" data-en="Export" data-sw="Pakua">Export</a>
+            <a href="admin.html" class="nav-link" data-en="Admin" data-sw="Usimamizi" data-roles="admin">Admin</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        
+        <!-- Training Modules Grid -->
+        <section id="trainingModules" class="training-modules">
+            <h2 data-en="Select Training Module" data-sw="Chagua Moduli ya Mafunzo">Select Training Module</h2>
+            
+            <div class="modules-grid">
+                
+                <!-- Combined Lessons -->
+                <div class="module-card disabled">
+                    <div class="module-icon">📚</div>
+                    <h3 data-en="Combined Lessons" data-sw="Masomo Yaliyochanganywa">Combined Lessons</h3>
+                    <p data-en="Grammar + vocabulary lessons like Duolingo" data-sw="Masomo ya sarufi + msamiati kama Duolingo">Grammar + vocabulary lessons like Duolingo</p>
+                    <div class="module-status">🚧 <span data-en="In Development" data-sw="Inaendelezwa">In Development</span></div>
+                </div>
+
+                <!-- Vocabulary Drills -->
+                <div class="module-card disabled">
+                    <div class="module-icon">📖</div>
+                    <h3 data-en="Vocabulary Drills" data-sw="Mazoezi ya Msamiati">Vocabulary Drills</h3>
+                    <p data-en="Practice words by category and level" data-sw="Zoeza maneno kwa kategoria na kiwango">Practice words by category and level</p>
+                    <div class="module-status">🚧 <span data-en="In Development" data-sw="Inaendelezwa">In Development</span></div>
+                </div>
+
+                <!-- Writing Practice -->
+                <div class="module-card disabled">
+                    <div class="module-icon">📝</div>
+                    <h3 data-en="Writing Practice" data-sw="Mazoezi ya Kuandika">Writing Practice</h3>
+                    <p data-en="Build sentences and practice writing" data-sw="Jenga sentensi na zoeza kuandika">Build sentences and practice writing</p>
+                    <div class="module-status">🚧 <span data-en="In Development" data-sw="Inaendelezwa">In Development</span></div>
+                </div>
+
+                <!-- Listening Practice -->
+                <div class="module-card disabled">
+                    <div class="module-icon">🎧</div>
+                    <h3 data-en="Listening Practice" data-sw="Mazoezi ya Kusikiliza">Listening Practice</h3>
+                    <p data-en="Listen and comprehend audio exercises" data-sw="Sikiliza na elewa mazoezi ya sauti">Listen and comprehend audio exercises</p>
+                    <div class="module-status">🚧 <span data-en="In Development" data-sw="Inaendelezwa">In Development</span></div>
+                </div>
+
+                <!-- Reading Practice -->
+                <div class="module-card disabled">
+                    <div class="module-icon">📄</div>
+                    <h3 data-en="Reading Practice" data-sw="Mazoezi ya Kusoma">Reading Practice</h3>
+                    <p data-en="Read and understand texts" data-sw="Soma na elewa maandishi">Read and understand texts</p>
+                    <div class="module-status">🚧 <span data-en="In Development" data-sw="Inaendelezwa">In Development</span></div>
+                </div>
+
+                <!-- Grammar Practice -->
+                <div class="module-card disabled">
+                    <div class="module-icon">✏️</div>
+                    <h3 data-en="Grammar Practice" data-sw="Mazoezi ya Sarufi">Grammar Practice</h3>
+                    <p data-en="Practice grammar rules and structures" data-sw="Zoeza sheria na muundo wa sarufi">Practice grammar rules and structures</p>
+                    <div class="module-status">🚧 <span data-en="In Development" data-sw="Inaendelezwa">In Development</span></div>
+                </div>
+
+                <!-- Verb Conjugation Trainer - ACTIVE! -->
+                <div class="module-card active" onclick="startVerbTrainer()">
+                    <div class="module-icon">🎯</div>
+                    <h3 data-en="Verb Conjugation Trainer" data-sw="Mzoezi wa Matumizi ya Vitenzi">Verb Conjugation Trainer</h3>
+                    <p data-en="Master verb conjugations across all tenses" data-sw="Jifunze matumizi ya vitenzi katika nyakati zote">Master verb conjugations across all tenses</p>
+                    <button class="btn btn-primary" data-en="Start Training" data-sw="Anza Mafunzo">Start Training</button>
+                </div>
+
+                <!-- Speaking Practice -->
+                <div class="module-card disabled">
+                    <div class="module-icon">🗣️</div>
+                    <h3 data-en="Speaking Practice" data-sw="Mazoezi ya Kuzungumza">Speaking Practice</h3>
+                    <p data-en="Practice pronunciation and speaking" data-sw="Zoeza matamshi na kuzungumza">Practice pronunciation and speaking</p>
+                    <div class="module-status">🤔 <span data-en="Maybe Later" data-sw="Labda Baadaye">Maybe Later</span></div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Verb Trainer Section (hidden initially) -->
+        <section id="verbTrainer" class="verb-trainer" style="display: none;">
+            
+            <!-- Step 1: Verb Selection -->
+            <div id="verbSelection" class="trainer-step active">
+                <button class="btn btn-secondary back-btn" onclick="backToModules()">← <span data-en="Back" data-sw="Rudi">Back</span></button>
+                
+                <h2 data-en="Select Verbs to Practice" data-sw="Chagua Vitenzi vya Kufunza">Select Verbs to Practice</h2>
+                
+                <div class="selection-options">
+                    <label class="radio-option">
+                        <input type="radio" name="verbOption" value="all_a1" checked>
+                        <span data-en="All A1 Verbs" data-sw="Vitenzi vyote vya A1">All A1 Verbs</span>
+                        (<span id="a1Count">0</span> <span data-en="verbs" data-sw="vitenzi">verbs</span>)
+                    </label>
+                    
+                    <label class="radio-option">
+                        <input type="radio" name="verbOption" value="all_a2">
+                        <span data-en="All A2 Verbs" data-sw="Vitenzi vyote vya A2">All A2 Verbs</span>
+                        (<span id="a2Count">0</span> <span data-en="verbs" data-sw="vitenzi">verbs</span>)
+                    </label>
+                    
+                    <label class="radio-option">
+                        <input type="radio" name="verbOption" value="specific">
+                        <span data-en="Select Specific Verbs" data-sw="Chagua Vitenzi Mahususi">Select Specific Verbs</span>
+                    </label>
+                </div>
+
+                <!-- Specific verb selection (shown when "specific" is selected) -->
+                <div id="specificVerbsList" class="specific-verbs-list" style="display: none;">
+                    <div class="verbs-checklist">
+                        <!-- Will be populated dynamically -->
+                    </div>
+                </div>
+
+                <button class="btn btn-primary next-btn" onclick="goToSettings()" data-en="Next: Settings" data-sw="Ifuatayo: Mipangilio">Next: Settings</button>
+            </div>
+
+            <!-- Step 2: Training Settings -->
+            <div id="trainingSettings" class="trainer-step">
+                <button class="btn btn-secondary back-btn" onclick="backToVerbSelection()">← <span data-en="Back" data-sw="Rudi">Back</span></button>
+                
+                <h2 data-en="Training Settings" data-sw="Mipangilio ya Mafunzo">Training Settings</h2>
+                
+                <div class="settings-form">
+                    
+                    <!-- Tenses Selection -->
+                    <div class="setting-group">
+                        <h3 data-en="Tenses to practice:" data-sw="Nyakati za kuzoesha:">Tenses to practice:</h3>
+                        <label class="checkbox-option">
+                            <input type="checkbox" class="tense-checkbox" value="all" id="allTenses" onchange="toggleAllTenses()">
+                            <strong data-en="All Tenses" data-sw="Nyakati Zote">All Tenses</strong>
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" class="tense-checkbox" value="present_simple" checked>
+                            <span data-en="Present Simple" data-sw="Wakati Uliopo Rahisi">Present Simple</span>
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" class="tense-checkbox" value="present_continuous">
+                            <span data-en="Present Continuous" data-sw="Wakati Uliopo Unaoendelea">Present Continuous</span>
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" class="tense-checkbox" value="past_simple">
+                            <span data-en="Past Simple" data-sw="Wakati Uliopita Rahisi">Past Simple</span>
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" class="tense-checkbox" value="past_continuous">
+                            <span data-en="Past Continuous" data-sw="Wakati Uliopita Unaoendelea">Past Continuous</span>
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" class="tense-checkbox" value="present_perfect">
+                            <span data-en="Present Perfect" data-sw="Wakati Uliopo Kamili">Present Perfect</span>
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" class="tense-checkbox" value="future_simple">
+                            <span data-en="Future Simple" data-sw="Wakati Ujao Rahisi">Future Simple</span>
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" class="tense-checkbox" value="future_continuous">
+                            <span data-en="Future Continuous" data-sw="Wakati Ujao Unaoendelea">Future Continuous</span>
+                        </label>
+                    </div>
+
+                    <!-- Pronouns Selection -->
+                    <div class="setting-group">
+                        <h3 data-en="Pronouns to practice:" data-sw="Viwakilishi vya kuzoesha:">Pronouns to practice:</h3>
+                        <label class="checkbox-option">
+                            <input type="checkbox" id="allPronouns" onchange="toggleAllPronouns()" checked>
+                            <strong data-en="All Pronouns" data-sw="Viwakilishi Vyote">All Pronouns</strong>
+                        </label>
+                        <div id="pronounsList">
+                            <!-- Will be populated from verbSettings -->
+                        </div>
+                    </div>
+
+                    <!-- Number of Exercises -->
+                    <div class="setting-group">
+                        <h3 data-en="Number of exercises:" data-sw="Idadi ya mazoezi:">Number of exercises:</h3>
+                        <select id="exerciseCount" class="form-select">
+                            <option value="10">10</option>
+                            <option value="20" selected>20</option>
+                            <option value="30">30</option>
+                            <option value="50">50</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <button class="btn btn-primary next-btn" onclick="startExercises()" data-en="Start Training" data-sw="Anza Mafunzo">Start Training</button>
+            </div>
+
+            <!-- Step 3: Exercises -->
+            <div id="exercises" class="trainer-step">
+                
+                <!-- Progress bar -->
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span data-en="Exercise" data-sw="Zoezi">Exercise</span>
+                        <span id="currentExercise">1</span> / <span id="totalExercises">20</span>
+                    </div>
+                </div>
+
+                <!-- Exercise Container -->
+                <div id="exerciseContainer" class="exercise-container">
+                    <!-- Exercises will be loaded dynamically -->
+                </div>
+
+                <!-- Navigation -->
+                <div class="exercise-navigation">
+                    <button class="btn btn-secondary" id="skipBtn" onclick="skipExercise()" data-en="Skip" data-sw="Ruka">Skip</button>
+                    <button class="btn btn-primary" id="submitBtn" onclick="checkAnswer()" data-en="Submit" data-sw="Wasilisha">Submit</button>
+                </div>
+
+            </div>
+
+            <!-- Step 4: Results & Conjugation Table -->
+            <div id="results" class="trainer-step">
+                
+                <div class="results-container">
+                    <h2 data-en="Training Complete! 🎉" data-sw="Mafunzo Yamekamilika! 🎉">Training Complete! 🎉</h2>
+                    
+                    <!-- Score -->
+                    <div class="score-display">
+                        <div class="score-circle">
+                            <span class="score-percentage" id="scorePercentage">0%</span>
+                        </div>
+                        <p>
+                            <span data-en="Your Score:" data-sw="Alama Zako:">Your Score:</span>
+                            <strong><span id="correctCount">0</span> / <span id="totalCount">0</span></strong>
+                        </p>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="results-actions">
+                        <button class="btn btn-primary" onclick="showConjugationTable()" data-en="📊 Show Conjugation Table" data-sw="📊 Onyesha Jedwali la Matumizi">📊 Show Conjugation Table</button>
+                        <button class="btn btn-secondary" onclick="reviewMistakes()" data-en="🔍 Review Mistakes" data-sw="🔍 Pitia Makosa">🔍 Review Mistakes</button>
+                        <button class="btn btn-secondary" onclick="restartTraining()" data-en="🔄 Train Again" data-sw="🔄 Zoesha Tena">🔄 Train Again</button>
+                        <button class="btn btn-secondary" onclick="backToModules()" data-en="← Back to Modules" data-sw="← Rudi kwa Moduli">← Back to Modules</button>
+                    </div>
+
+                </div>
+
+                <!-- Conjugation Table (hidden initially) -->
+                <div id="conjugationTableContainer" class="conjugation-table-container" style="display: none;">
+                    <h3 data-en="Full Conjugation Tables" data-sw="Jedwali Kamili la Matumizi">Full Conjugation Tables</h3>
+                    <div id="conjugationTables">
+                        <!-- Tables will be generated dynamically -->
+                    </div>
+                    <div class="table-actions">
+                        <button class="btn btn-secondary" onclick="downloadPDF()" data-en="📥 Download PDF" data-sw="📥 Pakua PDF">📥 Download PDF</button>
+                        <button class="btn btn-secondary" onclick="saveToNotes()" data-en="💾 Save to Notes" data-sw="💾 Hifadhi kwenye Maelezo">💾 Save to Notes</button>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p data-en="Lugha Hai - Preserving the linguistic heritage of Tanzania" data-sw="Lugha Hai - Kuhifadhi urithi wa lugha wa Tanzania">Lugha Hai - Preserving the linguistic heritage of Tanzania</p>
+        </div>
+    </footer>
+
+    <script src="scripts/common.js"></script>
+    <script src="scripts/training.js"></script>
+</body>
+</html>
