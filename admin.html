@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration - Lugha Hai</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1>Lugha Hai</h1>
+            <p class="subtitle" data-en="Administration" data-sw="Usimamizi">Administration</p>
+            
+            <div class="header-controls">
+                <!-- Language switcher -->
+                <div class="language-switcher">
+                    <button class="lang-btn active" data-lang="en">🇬🇧 English</button>
+                    <button class="lang-btn" data-lang="sw">🇹🇿 Kiswahili</button>
+                </div>
+                
+                <!-- Current user role display -->
+                <div class="user-info">
+                    <span data-en="Role:" data-sw="Jukumu:">Role:</span>
+                    <span id="currentRole">Admin, Editor</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <a href="index.html" class="nav-link" data-en="Dictionary" data-sw="Kamusi">Dictionary</a>
+            <a href="add-word.html" class="nav-link" data-en="Add/Edit Words" data-sw="Ongeza/Hariri" data-roles="contributor,editor,admin">Add/Edit Words</a>
+            <a href="review.html" class="nav-link" data-en="Review" data-sw="Kagua" data-roles="moderator,admin">Review</a>
+            <a href="training.html" class="nav-link" data-en="Training" data-sw="Mafunzo">Training</a>
+            <a href="export.html" class="nav-link" data-en="Export" data-sw="Pakua">Export</a>
+            <a href="admin.html" class="nav-link active" data-en="Admin" data-sw="Usimamizi" data-roles="admin">Admin</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        
+        <!-- Statistics -->
+        <section class="admin-section">
+            <h2 data-en="Statistics" data-sw="Takwimu">Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number" id="totalWords">0</span>
+                    <span class="stat-label" data-en="Total Words" data-sw="Jumla ya Maneno">Total Words</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="verifiedWords">0</span>
+                    <span class="stat-label" data-en="Verified" data-sw="Yaliyokaguliwa">Verified</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="pendingWords">0</span>
+                    <span class="stat-label" data-en="Pending" data-sw="Yanasubiri">Pending</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Development Settings - Role Selection -->
+        <section class="admin-section">
+            <h3 data-en="Development Settings - Role Selection" data-sw="Mipangilio ya Maendeleo - Chagua Majukumu">Development Settings - Role Selection</h3>
+            <p data-en="Select your roles for testing (this is for development only):" data-sw="Chagua majukumu yako kwa majaribio (hii ni kwa maendeleo tu):">Select your roles for testing (this is for development only):</p>
+            
+            <div class="role-selection">
+                <label class="role-checkbox-label">
+                    <input type="checkbox" id="role_viewer" class="role-checkbox" checked disabled>
+                    <span data-en="Viewer (always enabled)" data-sw="Mtazamaji (daima imewashwa)">Viewer (always enabled)</span>
+                </label>
+                
+                <label class="role-checkbox-label">
+                    <input type="checkbox" id="role_contributor" class="role-checkbox">
+                    <span data-en="Contributor (can add words → pending)" data-sw="Mchangiaji (anaweza kuongeza maneno → yanasubiri)">Contributor (can add words → pending)</span>
+                </label>
+                
+                <label class="role-checkbox-label">
+                    <input type="checkbox" id="role_editor" class="role-checkbox" checked>
+                    <span data-en="Editor (can edit verified words)" data-sw="Mhariri (anaweza kuhariri maneno yaliyokaguliwa)">Editor (can edit verified words)</span>
+                </label>
+                
+                <label class="role-checkbox-label">
+                    <input type="checkbox" id="role_moderator" class="role-checkbox">
+                    <span data-en="Moderator (can review pending words)" data-sw="Msimamizi (anaweza kukagua maneno yanayosubiri)">Moderator (can review pending words)</span>
+                </label>
+                
+                <label class="role-checkbox-label">
+                    <input type="checkbox" id="role_admin" class="role-checkbox" checked>
+                    <span data-en="Admin (full access)" data-sw="Msimamizi Mkuu (ufikiaji kamili)">Admin (full access)</span>
+                </label>
+            </div>
+        </section>
+
+        <!-- Manage Categories -->
+        <section class="admin-section">
+            <h3 data-en="Manage Categories" data-sw="Simamia Kategoria">Manage Categories</h3>
+            <button class="btn btn-primary" id="addCategoryBtn" data-en="Add New Category" data-sw="Ongeza Kategoria Mpya">Add New Category</button>
+            
+            <div id="categoriesList" class="categories-list">
+                <!-- Categories will be rendered here -->
+            </div>
+        </section>
+
+        <!-- Verb Settings -->
+        <section class="admin-section">
+            <h3 data-en="Verb Settings (Pronouns & Tenses)" data-sw="Mipangilio ya Vitenzi (Viwakilishi & Nyakati)">Verb Settings (Pronouns & Tenses)</h3>
+            
+            <div class="verb-settings-container">
+                <div class="verb-settings-section">
+                    <h4 data-en="Pronouns" data-sw="Viwakilishi">Pronouns</h4>
+                    <p class="help-text" data-en="Configure pronouns for verb conjugations" data-sw="Sanidi viwakilishi kwa matumizi ya vitenzi">Configure pronouns for verb conjugations</p>
+                    <div id="pronounsList" class="verb-settings-list">
+                        <!-- Pronouns will be rendered here -->
+                    </div>
+                    <button class="btn btn-primary" id="savePronounsBtn" data-en="Save Pronouns" data-sw="Hifadhi Viwakilishi">Save Pronouns</button>
+                </div>
+                
+                <div class="verb-settings-section">
+                    <h4 data-en="Tenses" data-sw="Nyakati">Tenses</h4>
+                    <p class="help-text" data-en="Configure tenses for verb conjugations" data-sw="Sanidi nyakati kwa matumizi ya vitenzi">Configure tenses for verb conjugations</p>
+                    <div id="tensesList" class="verb-settings-list">
+                        <!-- Tenses will be rendered here -->
+                    </div>
+                    <button class="btn btn-primary" id="saveTensesBtn" data-en="Save Tenses" data-sw="Hifadhi Nyakati">Save Tenses</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Management -->
+        <section class="admin-section">
+            <h3 data-en="Data Management" data-sw="Usimamizi wa Data">Data Management</h3>
+            <div class="admin-actions">
+                <button class="btn btn-secondary" id="backupData" data-en="Backup All Data" data-sw="Hifadhi Data Yote">Backup All Data</button>
+                <button class="btn btn-secondary" id="importData" data-en="Import Data" data-sw="Ingiza Data">Import Data</button>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p data-en="Lugha Hai - Preserving the linguistic heritage of Tanzania" data-sw="Lugha Hai - Kuhifadhi urithi wa lugha wa Tanzania">Lugha Hai - Preserving the linguistic heritage of Tanzania</p>
+        </div>
+    </footer>
+
+    <script src="scripts/common.js"></script>
+    <script src="scripts/admin.js"></script>
+</body>
+</html>
