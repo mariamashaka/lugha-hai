@@ -114,16 +114,11 @@ function getVerbSettings() {
 }
 
 function loadUserRoles() {
-    const saved = localStorage.getItem('lughahai_dev_roles');
-    if (saved) {
-        userRoles = JSON.parse(saved);
-    } else {
-        userRoles = ['viewer'];
-    }
-    // Viewer always enabled
-    if (!userRoles.includes('viewer')) {
-        userRoles.push('viewer');
-    }
+    // DEVELOPMENT MODE: Everyone has all roles
+    userRoles = ['viewer', 'contributor', 'editor', 'moderator', 'admin'];
+    
+    // Save to localStorage
+    localStorage.setItem('lughahai_dev_roles', JSON.stringify(userRoles));
 }
 
 function saveUserRoles() {
