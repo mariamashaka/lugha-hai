@@ -3,6 +3,7 @@
 // ============================================
 
 let editingWordId = null;
+let examplesCount = 0;
 
 // ============================================
 // INITIALIZATION
@@ -45,8 +46,10 @@ function setupCategoryListener() {
         categorySelect.addEventListener('change', function() {
             if (this.value === 'verbs') {
                 showConjugationForm();
+                showExamplesSection();
             } else {
                 hideConjugationForm();
+                hideExamplesSection();
             }
         });
     }
@@ -85,6 +88,195 @@ function populateAllCategorySelects() {
     if (filterCategorySelect) {
         populateCategorySelect(filterCategorySelect, true);
     }
+}
+
+// ============================================
+// EXAMPLE SENTENCES MANAGEMENT
+// ============================================
+
+function showExamplesSection() {
+    const section = document.getElementById('examplesSection');
+    if (section) {
+        section.style.display = 'block';
+        // Add first infinitive example automatically if none exist
+        if (examplesCount === 0) {
+            addExampleSentence(true); // true = infinitive
+        }
+    }
+}
+
+function hideExamplesSection() {
+    const section = document.getElementById('examplesSection');
+    if (section) {
+        section.style.display = 'none';
+        // Clear examples
+        document.getElementById('examplesList').innerHTML = '';
+        examplesCount = 0;
+    }
+}
+
+function addExampleSentence(isInfinitive = false) {
+    const currentLang = window.currentLang || 'en';
+    const exampleId = 'example_' + Date.now();
+    examplesCount++;
+    
+    const typeLabel = isInfinitive 
+        ? (currentLang === 'en' ? '1. INFINITIVE (Required)' : '1. INFINITIVE (Inahitajika)')
+        : (currentLang === 'en' ? `${examplesCount}. Example` : `${examplesCount}. Mfano`);
+    
+    const html = `
+        <div class="example-sentence-form" id="${exampleId}" data-is-infinitive="${isInfinitive}">
+            <div class="example-header">
+                <h4>${typeLabel}</h4>
+                ${!isInfinitive ? `<button type="button" class="btn btn-reject btn-sm" onclick="removeExample('${exampleId}')">✗ ${currentLang === 'en' ? 'Remove' : 'Ondoa'}</button>` : ''}
+            </div>
+            
+            <div class="form-group">
+                <label data-en="Kikurya Sentence:" data-sw="Sentensi ya Kikurya:">Kikurya Sentence:</label>
+                <input type="text" class="example-kikurya" placeholder="${isInfinitive ? 'Ndatúna kurāghera' : 'Uni ndarāghire inyama'}" required>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label data-en="Swahili Translation:" data-sw="Tafsiri ya Kiswahili:">Swahili Translation:</label>
+                    <input type="text" class="example-swahili" placeholder="${isInfinitive ? 'Ninataka kula' : 'Mimi nilikula nyama'}" required>
+                </div>
+                <div class="form-group">
+                    <label data-en="English Translation:" data-sw="Tafsiri ya Kiingereza:">English Translation:</label>
+                    <input type="text" class="example-english" placeholder="${isInfinitive ? 'I want to eat' : 'I ate meat'}" required>
+                </div>
+            </div>
+            
+            <div class="word-by-word-section">
+                <label data-en="Word-by-Word Translation:" data-sw="Tafsiri Neno kwa Neno:">Word-by-Word Translation:</label>
+                <div class="words-list" id="${exampleId}_words">
+                    <!-- Words will be added here -->
+                </div>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="addWordTranslation('${exampleId}')">
+                    + <span data-en="Add Word" data-sw="Ongeza Neno">Add Word</span>
+                </button>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('examplesList').insertAdjacentHTML('beforeend', html);
+    
+    // Add first word translation automatically
+    addWordTranslation(exampleId);
+}
+
+function removeExample(exampleId) {
+    const currentLang = window.currentLang || 'en';
+    const confirmText = currentLang === 'en' 
+        ? 'Remove this example?'
+        : 'Ondoa mfano huu?';
+    
+    if (confirm(confirmText)) {
+        const element = document.getElementById(exampleId);
+        if (element) {
+            element.remove();
+            examplesCount--;
+        }
+    }
+}
+
+function addWordTranslation(exampleId) {
+    const wordId = exampleId + '_word_' + Date.now();
+    
+    const html = `
+        <div class="word-translation-item" id="${wordId}">
+            <input type="text" placeholder="Kikurya" class="word-kikurya">
+            <span>→</span>
+            <input type="text" placeholder="Swahili" class="word-swahili">
+            <span>→</span>
+            <input type="text" placeholder="English" class="word-english">
+            <button type="button" class="btn btn-reject btn-sm" onclick="removeWord('${wordId}')">✗</button>
+        </div>
+    `;
+    
+    document.getElementById(exampleId + '_words').insertAdjacentHTML('beforeend', html);
+}
+
+function removeWord(wordId) {
+    const element = document.getElementById(wordId);
+    if (element) {
+        element.remove();
+    }
+}
+
+function collectExamples() {
+    const examples = [];
+    const exampleForms = document.querySelectorAll('.example-sentence-form');
+    
+    exampleForms.forEach((form, index) => {
+        const exampleId = form.id;
+        const isInfinitive = form.dataset.isInfinitive === 'true';
+        
+        const kikurya = form.querySelector('.example-kikurya').value.trim();
+        const swahili = form.querySelector('.example-swahili').value.trim();
+        const english = form.querySelector('.example-english').value.trim();
+        
+        // Collect word-by-word translations
+        const words = [];
+        const wordItems = form.querySelectorAll('.word-translation-item');
+        wordItems.forEach(item => {
+            const kikuryaWord = item.querySelector('.word-kikurya').value.trim();
+            const swahiliWord = item.querySelector('.word-swahili').value.trim();
+            const englishWord = item.querySelector('.word-english').value.trim();
+            
+            if (kikuryaWord && swahiliWord && englishWord) {
+                words.push({
+                    kikurya: kikuryaWord,
+                    swahili: swahiliWord,
+                    english: englishWord
+                });
+            }
+        });
+        
+        if (kikurya && swahili && english && words.length > 0) {
+            examples.push({
+                kikurya: kikurya,
+                swahili: swahili,
+                english: english,
+                type: isInfinitive ? 'infinitive' : 'conjugated',
+                words: words
+            });
+        }
+    });
+    
+    return examples;
+}
+
+function validateExamples(examples) {
+    const currentLang = window.currentLang || 'en';
+    
+    // Must have at least 3 examples
+    if (examples.length < 3) {
+        alert(currentLang === 'en' 
+            ? 'Verbs require at least 3 example sentences!'
+            : 'Vitenzi vinahitaji angalau mifano 3 ya sentensi!');
+        return false;
+    }
+    
+    // First must be infinitive
+    if (examples[0].type !== 'infinitive') {
+        alert(currentLang === 'en'
+            ? 'First example must be infinitive form!'
+            : 'Mfano wa kwanza lazima uwe infinitive!');
+        return false;
+    }
+    
+    // All examples must have word-by-word translations
+    for (let i = 0; i < examples.length; i++) {
+        if (examples[i].words.length === 0) {
+            alert(currentLang === 'en'
+                ? `Example ${i + 1} is missing word-by-word translations!`
+                : `Mfano ${i + 1} hauna tafsiri neno kwa neno!`);
+            return false;
+        }
+    }
+    
+    return true;
 }
 
 // ============================================
@@ -156,15 +348,23 @@ function handleWordSubmit(e) {
         english: document.getElementById('englishWord').value.trim(),
         explanationSw: document.getElementById('swahiliExplanation').value.trim(),
         explanationEn: document.getElementById('englishExplanation').value.trim(),
-        exampleSw: document.getElementById('swahiliExample').value.trim(),
-        exampleEn: document.getElementById('englishExample').value.trim(),
         category: document.getElementById('category').value,
         level: document.getElementById('level').value,
-        audioFile: null
+        audioFile: null // TODO: Handle file upload later
     };
     
-    // Get conjugations if verb
+    // Get examples if verb
     if (formData.category === 'verbs') {
+        const examples = collectExamples();
+        
+        // Validate examples
+        if (!validateExamples(examples)) {
+            return; // Stop submission
+        }
+        
+        formData.examples = examples;
+        
+        // Get conjugations
         const conjugations = {};
         const verbSettings = getVerbSettings();
         
@@ -206,7 +406,9 @@ function handleWordSubmit(e) {
 function clearForm() {
     document.getElementById('wordForm').reset();
     hideConjugationForm();
+    hideExamplesSection();
     editingWordId = null;
+    examplesCount = 0;
     
     // Update button text
     const submitBtn = document.querySelector('#wordForm button[type="submit"]');
@@ -309,10 +511,46 @@ function editWordFromList(id) {
     document.getElementById('englishWord').value = word.english;
     document.getElementById('swahiliExplanation').value = word.explanationSw || '';
     document.getElementById('englishExplanation').value = word.explanationEn || '';
-    document.getElementById('swahiliExample').value = word.exampleSw || '';
-    document.getElementById('englishExample').value = word.exampleEn || '';
     document.getElementById('category').value = word.category;
     document.getElementById('level').value = word.level;
+    
+    // Fill examples if verb
+    if (word.category === 'verbs' && word.examples && word.examples.length > 0) {
+        showExamplesSection();
+        
+        // Clear existing examples
+        document.getElementById('examplesList').innerHTML = '';
+        examplesCount = 0;
+        
+        // Add examples from word
+        word.examples.forEach((example, index) => {
+            const isInfinitive = example.type === 'infinitive';
+            addExampleSentence(isInfinitive);
+            
+            const exampleForm = document.querySelectorAll('.example-sentence-form')[index];
+            if (exampleForm) {
+                exampleForm.querySelector('.example-kikurya').value = example.kikurya;
+                exampleForm.querySelector('.example-swahili').value = example.swahili;
+                exampleForm.querySelector('.example-english').value = example.english;
+                
+                // Clear auto-added word translation
+                const wordsContainer = exampleForm.querySelector('.words-list');
+                wordsContainer.innerHTML = '';
+                
+                // Add word translations
+                example.words.forEach(word => {
+                    const exampleId = exampleForm.id;
+                    addWordTranslation(exampleId);
+                    
+                    const wordItems = wordsContainer.querySelectorAll('.word-translation-item');
+                    const lastItem = wordItems[wordItems.length - 1];
+                    lastItem.querySelector('.word-kikurya').value = word.kikurya;
+                    lastItem.querySelector('.word-swahili').value = word.swahili;
+                    lastItem.querySelector('.word-english').value = word.english;
+                });
+            }
+        });
+    }
     
     // Fill conjugations if verb
     if (word.category === 'verbs' && word.conjugations) {
@@ -357,3 +595,7 @@ function deleteWordFromList(id) {
 
 window.editWordFromList = editWordFromList;
 window.deleteWordFromList = deleteWordFromList;
+window.addExampleSentence = addExampleSentence;
+window.removeExample = removeExample;
+window.addWordTranslation = addWordTranslation;
+window.removeWord = removeWord;
