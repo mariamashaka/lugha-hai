@@ -115,6 +115,23 @@
                 <label for="englishExample" data-en="Example sentence (English)" data-sw="Sentensi ya mfano (English)">Example sentence (English)</label>
                 <input type="text" id="englishExample" placeholder="Optional">
             </div>
+
+            <!-- Example Sentences (for verbs) -->
+<div id="examplesSection" style="display: none;">
+    <h3 data-en="Example Sentences" data-sw="Mifano ya Sentensi">Example Sentences</h3>
+    <p class="help-text" data-en="Add at least 3 example sentences. First one must be infinitive form." 
+       data-sw="Ongeza angalau mifano 3. Ya kwanza lazima iwe infinitive.">
+        Add at least 3 example sentences. First one must be infinitive form.
+    </p>
+    
+    <div id="examplesList">
+        <!-- Examples will be added here dynamically -->
+    </div>
+    
+    <button type="button" class="btn btn-secondary" onclick="addExampleSentence()">
+        + <span data-en="Add Example" data-sw="Ongeza Mfano">Add Example</span>
+    </button>
+</div>
             
             <div class="form-group">
                 <label for="audioFile" data-en="Audio file" data-sw="Faili ya sauti">Audio file</label>
