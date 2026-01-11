@@ -33,7 +33,7 @@ function setupSearch() {
     
     if (searchBox) {
         searchBox.addEventListener('input', function() {
-            currentPage = 1; // Reset to first page on new search
+            currentPage = 1;
             renderSearchResults();
         });
     }
@@ -275,16 +275,7 @@ function updateAboutStats() {
 }
 
 // ============================================
-// WORD CARD (uses common.js createWordCard)
-// ============================================
-
-// The createWordCard function is already in common.js
-// We just call it with appropriate options
-
-// ============================================
 // EXPOSE FUNCTIONS GLOBALLY
 // ============================================
 
-// Functions are mostly internal, but expose if needed
 window.renderSearchResults = renderSearchResults;
-```
