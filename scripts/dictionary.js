@@ -288,30 +288,3 @@ function updateAboutStats() {
 // Functions are mostly internal, but expose if needed
 window.renderSearchResults = renderSearchResults;
 ```
-
-**ГОТОВО!** `scripts/dictionary.js` создан! 🎉
-
----
-
-## **ВСЕ ФАЙЛЫ ГОТОВЫ!** 🎊
-
-**Итоговая структура:**
-```
-lugha-hai/
-├── index.html
-├── add-word.html
-├── review.html
-├── export.html
-├── admin.html
-├── training.html
-├── styles/
-│   ├── main.css       ← переименуй styles.css в это
-│   └── training.css   ← новый
-└── scripts/
-    ├── common.js      ← базовые функции (обнови!)
-    ├── dictionary.js  ← новый
-    ├── add-word.js    ← новый
-    ├── review.js      ← новый
-    ├── export.js      ← новый
-    ├── admin.js       ← новый
-    └── training.js    ← новый
