@@ -3,7 +3,6 @@
 // ============================================
 
 // Global state
-let currentLang = 'en';
 let selectedVerbs = [];
 let selectedTenses = [];
 let selectedPronouns = [];
