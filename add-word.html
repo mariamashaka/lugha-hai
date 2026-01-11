@@ -60,8 +60,9 @@
             </div>
             
             <div class="form-group">
+                <label for="alternativeSpellings" data-en="Alternative spellings" data-sw="Tahajia mbadala">Alternative spellings</label>
+                <input type="text" id="alternativeSpellings" placeholder="comma separated, optional">
                 <small data-en="Alternative spellings (comma separated)" data-sw="Tahajia mbadala (tenganisha kwa mkato)">Alternative spellings (comma separated)</small>
-                <input type="text" id="alternativeSpellings" placeholder="optional">
             </div>
             
             <div class="form-group">
@@ -106,37 +107,33 @@
                 </div>
             </div>
             
-            <div class="form-group">
-                <label for="swahiliExample" data-en="Example sentence (Kiswahili)" data-sw="Sentensi ya mfano (Kiswahili)">Example sentence (Kiswahili)</label>
-                <input type="text" id="swahiliExample" placeholder="Optional">
-            </div>
-            
-            <div class="form-group">
-                <label for="englishExample" data-en="Example sentence (English)" data-sw="Sentensi ya mfano (English)">Example sentence (English)</label>
-                <input type="text" id="englishExample" placeholder="Optional">
-            </div>
-
-            <!-- Example Sentences (for verbs) -->
-<div id="examplesSection" style="display: none;">
-    <h3 data-en="Example Sentences" data-sw="Mifano ya Sentensi">Example Sentences</h3>
-    <p class="help-text" data-en="Add at least 3 example sentences. First one must be infinitive form." 
-       data-sw="Ongeza angalau mifano 3. Ya kwanza lazima iwe infinitive.">
-        Add at least 3 example sentences. First one must be infinitive form.
-    </p>
-    
-    <div id="examplesList">
-        <!-- Examples will be added here dynamically -->
-    </div>
-    
-    <button type="button" class="btn btn-secondary" onclick="addExampleSentence()">
-        + <span data-en="Add Example" data-sw="Ongeza Mfano">Add Example</span>
-    </button>
-</div>
-            
+            <!-- Audio Upload -->
             <div class="form-group">
                 <label for="audioFile" data-en="Audio file" data-sw="Faili ya sauti">Audio file</label>
                 <input type="file" id="audioFile" accept="audio/*">
                 <small data-en="Upload pronunciation (optional)" data-sw="Pakia matamshi (si lazima)">Upload pronunciation (optional)</small>
+            </div>
+            
+            <!-- Example Sentences (for verbs) -->
+            <div id="examplesSection" style="display: none;">
+                <h3 data-en="Example Sentences (Required for Verbs)" data-sw="Mifano ya Sentensi (Inahitajika kwa Vitenzi)">Example Sentences (Required for Verbs)</h3>
+                <div class="help-box">
+                    <p data-en="Requirements:" data-sw="Mahitaji:">Requirements:</p>
+                    <ul>
+                        <li data-en="Minimum 3 examples" data-sw="Angalau mifano 3">Minimum 3 examples</li>
+                        <li data-en="First example MUST be infinitive form" data-sw="Mfano wa kwanza LAZIMA uwe infinitive">First example MUST be infinitive form</li>
+                        <li data-en="Other examples: different pronouns + tenses" data-sw="Mifano mingine: viwakilishi na nyakati tofauti">Other examples: different pronouns + tenses</li>
+                        <li data-en="Include word-by-word translations" data-sw="Jumuisha tafsiri neno kwa neno">Include word-by-word translations</li>
+                    </ul>
+                </div>
+                
+                <div id="examplesList">
+                    <!-- Examples will be added here dynamically -->
+                </div>
+                
+                <button type="button" class="btn btn-secondary" onclick="addExampleSentence()">
+                    + <span data-en="Add Example" data-sw="Ongeza Mfano">Add Example</span>
+                </button>
             </div>
             
             <!-- Conjugation form will be inserted here dynamically for verbs -->
