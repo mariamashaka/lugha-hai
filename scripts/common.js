@@ -81,24 +81,24 @@ function loadVerbSettings() {
     if (saved) {
         verbSettings = JSON.parse(saved);
     } else {
-        // Default verb settings for Kikurya
+        // Default verb settings for Kikurya - UPDATED
         verbSettings = {
             pronouns: [
                 { id: 'p1', kikurya: 'Uni', sw: 'mimi', en: 'I' },
-                { id: 'p2', kikurya: 'Uwe', sw: 'wewe', en: 'you (sg)' },
-                { id: 'p3', kikurya: 'Uura', sw: 'yeye', en: 'he/she' },
-                { id: 'p4', kikurya: 'Bheito', sw: 'sisi', en: 'we' },
-                { id: 'p5', kikurya: 'BheinyU', sw: 'ninyi', en: 'you (pl)' },
-                { id: 'p6', kikurya: 'Bhabho', sw: 'wao', en: 'they' }
+                { id: 'p2', kikurya: 'Uwé', sw: 'wewe', en: 'you (sg)' },
+                { id: 'p3', kikurya: 'Uurá', sw: 'yeye', en: 'he/she' },
+                { id: 'p4', kikurya: 'Bheitó', sw: 'sisi', en: 'we' },
+                { id: 'p5', kikurya: 'Bheinyú', sw: 'ninyi', en: 'you (pl)' },
+                { id: 'p6', kikurya: 'Bhabhó', sw: 'wao', en: 'they' }
             ],
             tenses: [
-                { id: 'present_simple', kikurya: 'present', sw: 'wakati uliopo rahisi', en: 'present simple' },
-                { id: 'present_continuous', kikurya: 'present cont', sw: 'wakati uliopo unaoendelea', en: 'present continuous' },
-                { id: 'past_simple', kikurya: 'past', sw: 'wakati uliopita rahisi', en: 'past simple' },
-                { id: 'past_continuous', kikurya: 'past cont', sw: 'wakati uliopita unaoendelea', en: 'past continuous' },
-                { id: 'present_perfect', kikurya: 'present perfect', sw: 'wakati uliopo kamili', en: 'present perfect' },
-                { id: 'future_simple', kikurya: 'future', sw: 'wakati ujao rahisi', en: 'future simple' },
-                { id: 'future_continuous', kikurya: 'future cont', sw: 'wakati ujao unaoendelea', en: 'future continuous' }
+                { id: 'past_simple', kikurya: 'Past simple', sw: 'Wakati uliopita rahisi', en: 'Past simple' },
+                { id: 'past_continuous', kikurya: 'Past cont', sw: 'Wakati uliopita unaoendelea', en: 'Past continuous' },
+                { id: 'present_simple', kikurya: 'Present sim', sw: 'Wakati uliopo rahisi', en: 'Present simple' },
+                { id: 'present_continuous', kikurya: 'Present cont', sw: 'Wakati uliopo unaoendelea', en: 'Present continuous' },
+                { id: 'present_perfect', kikurya: 'Present perfect', sw: 'Wakati uliopo kamili', en: 'Present perfect' },
+                { id: 'future_simple', kikurya: 'Future simple', sw: 'Wakati ujao rahisi', en: 'Future simple' },
+                { id: 'future_continuous', kikurya: 'Future continuous', sw: 'Wakati ujao unaoendelea', en: 'Future continuous' }
             ]
         };
         saveVerbSettings();
