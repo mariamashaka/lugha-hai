@@ -1,4 +1,524 @@
 /* ============================================
+   CSS VARIABLES
+   ============================================ */
+
+:root {
+    --fresh-green: #4a7c2c;
+    --leaf-green: #2d5016;
+    --light-green: #e8f5e9;
+    --cream: #fef9f3;
+    --rain-blue: #e3f2fd;
+    --white: #ffffff;
+    --text-dark: #333333;
+    --text-light: #666666;
+    --border: #d4d4d4;
+    --shadow: rgba(0, 0, 0, 0.1);
+    
+    /* Status colors */
+    --verified: #4caf50;
+    --pending: #ff9800;
+    --rejected: #f44336;
+}
+
+/* ============================================
+   RESET & BASE STYLES
+   ============================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--text-dark);
+    background: var(--cream);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+a {
+    text-decoration: none;
+    color: var(--fresh-green);
+}
+
+a:hover {
+    color: var(--leaf-green);
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+header {
+    background: var(--fresh-green);
+    color: var(--white);
+    padding: 1.5rem 0;
+    box-shadow: 0 2px 8px var(--shadow);
+}
+
+header h1 {
+    font-size: 2rem;
+    margin-bottom: 0.3rem;
+}
+
+header .subtitle {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+.header-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    gap: 1rem;
+}
+
+.language-switcher {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.lang-btn {
+    background: var(--white);
+    color: var(--fresh-green);
+    border: 2px solid var(--white);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.lang-btn:hover {
+    background: var(--light-green);
+}
+
+.lang-btn.active {
+    background: var(--leaf-green);
+    color: var(--white);
+    border-color: var(--leaf-green);
+}
+
+.user-info {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+/* ============================================
+   NAVIGATION
+   ============================================ */
+
+.main-nav {
+    background: var(--white);
+    box-shadow: 0 2px 4px var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.main-nav .container {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+}
+
+.nav-link {
+    padding: 1rem 1.5rem;
+    color: var(--text-dark);
+    font-weight: 600;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.nav-link:hover {
+    background: var(--light-green);
+    color: var(--fresh-green);
+}
+
+.nav-link.active {
+    color: var(--fresh-green);
+    border-bottom-color: var(--fresh-green);
+}
+
+/* ============================================
+   MAIN CONTENT
+   ============================================ */
+
+main {
+    padding: 2rem 0;
+    min-height: 70vh;
+}
+
+h2, h3 {
+    color: var(--leaf-green);
+    margin-bottom: 1rem;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+
+.btn {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.btn-primary {
+    background: var(--fresh-green);
+    color: var(--white);
+}
+
+.btn-primary:hover {
+    background: var(--leaf-green);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--shadow);
+}
+
+.btn-secondary {
+    background: var(--cream);
+    color: var(--text-dark);
+    border: 2px solid var(--border);
+}
+
+.btn-secondary:hover {
+    background: var(--light-green);
+}
+
+.btn-edit {
+    background: var(--rain-blue);
+    color: var(--text-dark);
+}
+
+.btn-edit:hover {
+    background: #bbdefb;
+}
+
+.btn-approve {
+    background: var(--verified);
+    color: var(--white);
+}
+
+.btn-approve:hover {
+    background: #45a049;
+}
+
+.btn-reject {
+    background: var(--rejected);
+    color: var(--white);
+}
+
+.btn-reject:hover {
+    background: #da190b;
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+/* ============================================
+   FORMS
+   ============================================ */
+
+.word-form {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px var(--shadow);
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--fresh-green);
+    box-shadow: 0 0 0 3px rgba(74, 124, 44, 0.1);
+}
+
+.form-group small {
+    display: block;
+    margin-top: 0.3rem;
+    color: var(--text-light);
+    font-size: 0.85rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.required {
+    color: var(--rejected);
+}
+
+.help-text {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+/* ============================================
+   WORD CARDS
+   ============================================ */
+
+.word-card {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px var(--shadow);
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.word-status {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-verified {
+    background: var(--verified);
+    color: var(--white);
+}
+
+.status-pending {
+    background: var(--pending);
+    color: var(--white);
+}
+
+.status-rejected {
+    background: var(--rejected);
+    color: var(--white);
+}
+
+.word-kikurya {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--leaf-green);
+    margin-bottom: 0.5rem;
+}
+
+.word-transcription {
+    color: var(--text-light);
+    font-style: italic;
+    margin-bottom: 0.5rem;
+}
+
+.word-alt-spellings {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.word-translation {
+    font-size: 1.2rem;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+}
+
+.word-meta {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.meta-tag {
+    background: var(--light-green);
+    color: var(--leaf-green);
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.word-explanation,
+.word-example {
+    margin-bottom: 0.8rem;
+    color: var(--text-dark);
+}
+
+.word-example {
+    font-style: italic;
+    color: var(--text-light);
+}
+
+.word-conjugations {
+    background: var(--cream);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.word-conjugations strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--leaf-green);
+}
+
+.tense-group {
+    margin-bottom: 0.5rem;
+}
+
+.tense-group em {
+    color: var(--fresh-green);
+    font-weight: 600;
+}
+
+.word-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+/* ============================================
+   FILTERS
+   ============================================ */
+
+.filters {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.filters select,
+.filters input {
+    padding: 0.8rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.filters select {
+    min-width: 200px;
+}
+
+.filters input {
+    flex: 1;
+    min-width: 250px;
+}
+
+/* ============================================
+   SEARCH BOX
+   ============================================ */
+
+.search-container {
+    margin-bottom: 2rem;
+}
+
+.search-box {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    font-size: 1.2rem;
+    border: 3px solid var(--fresh-green);
+    border-radius: 12px;
+}
+
+.search-box:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(74, 124, 44, 0.2);
+}
+
+/* ============================================
+   PAGINATION
+   ============================================ */
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.pagination button {
+    padding: 0.8rem 1.5rem;
+}
+
+.pagination span {
+    font-weight: 600;
+}
+
+/* ============================================
+   NO RESULTS
+   ============================================ */
+
+.no-results {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-light);
+}
+
+.no-results-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
+footer {
+    background: var(--leaf-green);
+    color: var(--white);
+    padding: 2rem 0;
+    margin-top: 3rem;
+    text-align: center;
+}
+
+/* ============================================
    EXAMPLE SENTENCES FORMS
    ============================================ */
 
@@ -108,7 +628,7 @@
 }
 
 /* ============================================
-   CONJUGATION FORM (update)
+   CONJUGATION FORM
    ============================================ */
 
 .conjugation-form {
@@ -168,10 +688,28 @@
 }
 
 /* ============================================
-   RESPONSIVE - EXAMPLE FORMS
+   RESPONSIVE
    ============================================ */
 
 @media (max-width: 768px) {
+    .header-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .filters {
+        flex-direction: column;
+    }
+    
+    .filters select,
+    .filters input {
+        width: 100%;
+    }
+    
     .word-translation-item {
         flex-direction: column;
         gap: 0.5rem;
