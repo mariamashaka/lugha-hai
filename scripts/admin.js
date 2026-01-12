@@ -259,10 +259,34 @@ function renderTensesList() {
 }
 
 function addPronoun() {
+    const currentLang = window.currentLang || 'en';
+    
+    // Prompt for pronoun ID (must be p1, p2, p3, etc format)
+    const pronounId = prompt(currentLang === 'en' 
+        ? 'Pronoun ID (format: p1, p2, p3, etc):' 
+        : 'ID ya Kiwakilishi (muundo: p1, p2, p3, n.k):');
+    
+    if (!pronounId) return;
+    
+    // Validate ID format
+    const idPattern = /^p\d+$/;
+    if (!idPattern.test(pronounId)) {
+        alert(currentLang === 'en' 
+            ? 'Invalid ID format. Use p1, p2, p3, etc.'
+            : 'Muundo wa ID si sahihi. Tumia p1, p2, p3, n.k.');
+        return;
+    }
+    
     const verbSettings = getVerbSettings();
     
+    // Check if ID already exists
+    if (verbSettings.pronouns.find(p => p.id === pronounId)) {
+        alert(currentLang === 'en' ? 'Pronoun ID already exists!' : 'ID ya kiwakilishi tayari ipo!');
+        return;
+    }
+    
     verbSettings.pronouns.push({
-        id: 'p' + Date.now(),
+        id: pronounId,
         kikurya: '',
         sw: '',
         en: ''
