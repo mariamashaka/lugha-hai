@@ -101,7 +101,14 @@ function startExercises() {
     
     selectedTenses = Array.from(checkedTenses).map(cb => cb.value);
     
-    // Get selected pronouns
+// Get selected pronouns
+const allPronounsChecked = document.getElementById('allPronouns')?.checked;
+
+if (allPronounsChecked) {
+    // Use all pronouns
+    const verbSettings = getVerbSettings();
+    selectedPronouns = verbSettings.pronouns.map(p => p.id);
+} else {
     const pronounCheckboxes = document.querySelectorAll('.pronoun-checkbox:checked');
     selectedPronouns = Array.from(pronounCheckboxes).map(cb => cb.value);
     
@@ -109,6 +116,7 @@ function startExercises() {
         alert(currentLang === 'en' ? 'Please select at least one pronoun' : 'Tafadhali chagua kiwakilishi kimoja angalau');
         return;
     }
+}
     
     exerciseCount = parseInt(document.getElementById('exerciseCount').value);
     
