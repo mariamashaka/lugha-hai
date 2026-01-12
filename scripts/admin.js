@@ -307,10 +307,34 @@ function savePronouns() {
 }
 
 function addTense() {
+    const currentLang = window.currentLang || 'en';
+    
+    // Prompt for tense ID (must be in snake_case format)
+    const tenseId = prompt(currentLang === 'en' 
+        ? 'Tense ID (lowercase, underscores, e.g. "past_simple"):' 
+        : 'ID ya Wakati (herufi ndogo, underscores, mfano "past_simple"):');
+    
+    if (!tenseId) return;
+    
+    // Validate ID format
+    const idPattern = /^[a-z_]+$/;
+    if (!idPattern.test(tenseId)) {
+        alert(currentLang === 'en' 
+            ? 'Invalid ID format. Use lowercase letters and underscores only (e.g. past_simple)'
+            : 'Muundo wa ID si sahihi. Tumia herufi ndogo na underscores tu (mfano past_simple)');
+        return;
+    }
+    
     const verbSettings = getVerbSettings();
     
+    // Check if ID already exists
+    if (verbSettings.tenses.find(t => t.id === tenseId)) {
+        alert(currentLang === 'en' ? 'Tense ID already exists!' : 'ID ya wakati tayari ipo!');
+        return;
+    }
+    
     verbSettings.tenses.push({
-        id: 't' + Date.now(),
+        id: tenseId,
         kikurya: '',
         sw: '',
         en: ''
